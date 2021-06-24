@@ -1,12 +1,10 @@
 #pragma once
 
-#include <nodes/NodeDataModel>
+#include "LotonNodeData.hpp"
 
 #include <flan/Function.h>
 
-using QtNodes::NodeDataType;
-
-class FunctionData : public QtNodes::NodeData
+class FunctionData : public LotonNodeData
 {
 public:
 	virtual int numIns() const = 0;

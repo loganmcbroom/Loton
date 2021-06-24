@@ -17,11 +17,9 @@ Ideas:
 	use fancy path finding in qmake
 
 Todo:
-	upload nodeeditor branch
 
-Bugs:
 Task:
-	upload repo
+	commit changes
 */
 
 

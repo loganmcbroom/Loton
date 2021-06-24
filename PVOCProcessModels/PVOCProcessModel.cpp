@@ -19,7 +19,8 @@ PVOCProcessModel::PVOCProcessModel()
 
 	QObject::connect( this, &PVOCProcessModel::dataUpdated, [this]()
 		{
-		playerModel->setPVOC( std::dynamic_pointer_cast<PVOCData>( outData( 0 ) ) );
+		if( out && ! std::static_pointer_cast<LotonNodeData>( out )->wipe() )
+			playerModel->setPVOC( std::static_pointer_cast<PVOCData>( out ) );
 		});
 	}
 

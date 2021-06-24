@@ -2,6 +2,7 @@
 
 #include "LotonNodeModel.hpp"
 
+class LotonNodeData;
 class NumberData;
 class Func1x1Data;
 class Func2x1Data;
@@ -17,87 +18,66 @@ public:
 	FunctionNodeModel();
 	virtual ~FunctionNodeModel() override;
 
-	void updateOutput();
+	virtual void updateOutput() = 0;
+
+	QString portCaption( PortType, PortIndex ) const override { return ""; }
+	bool portCaptionVisible( PortType, PortIndex ) const override { return true; }
+	unsigned int nPorts( PortType ) const override { return 1; }
+	void inputsUpdated( std::shared_ptr<NodeData>, PortIndex ) override final;
+	void wipeOutputs( PortIndex ) override;
+	std::shared_ptr<NodeData> outData( PortIndex = 0 ) override final;
+
+protected:
+	std::weak_ptr<NumberData> in;
+	std::shared_ptr<LotonNodeData> out;
+	std::shared_ptr<LotonNodeData> uncomposedOut; // This works for now, if full composition returns we need to check in type instead
 
 signals:
 	void dataUpdatedDynamic();
+};
+
+
+
+
+class Function1x1NodeModel : public FunctionNodeModel
+{ Q_OBJECT
+public:
+	Function1x1NodeModel();
+	virtual ~Function1x1NodeModel() override;
+
+	void updateOutput() override;
 
 protected:
 	virtual QString caption() const override = 0;
 	virtual QString name() const override = 0;
 	virtual std::shared_ptr<Func1x1Data> function() = 0;
-
-	QString portCaption( PortType, PortIndex ) const override { return ""; }
-	bool portCaptionVisible( PortType, PortIndex ) const override { return true; }
-	unsigned int nPorts( PortType t ) const override { return 1; }
-
-	void setInData( std::shared_ptr<NodeData>, PortIndex ) override;
-	std::shared_ptr<NodeData> outData( PortIndex = 0 ) override;
 	NodeDataType dataType( PortType, PortIndex ) const override;
-	//ControllerPairs makeInputControllers() override;
-	//QWidget * makeHeaderWidget() override;
-	//QJsonObject save() const override;
-	//void restore( QJsonObject const & p ) override;
-
-	std::weak_ptr<NumberData> in;
-	std::shared_ptr<Func1x1Data> out;
-	std::shared_ptr<Func1x1Data> uncomposedOut; // This works for now, if full composition returns we need to check in type instead
 };
 
-class Function2x1NodeModel : public LotonNodeModel
+class Function2x1NodeModel : public FunctionNodeModel
 { Q_OBJECT
 public:
 	Function2x1NodeModel();
 	virtual ~Function2x1NodeModel() override;
-
-	void updateOutput();
-
-signals:
-	void dataUpdatedDynamic();
+	void updateOutput() override;
 
 protected:
 	virtual QString caption() const override = 0;
 	virtual QString name() const override = 0;
 	virtual std::shared_ptr<Func2x1Data> function() = 0;
-
-	QString portCaption( PortType, PortIndex ) const override { return ""; }
-	bool portCaptionVisible( PortType, PortIndex ) const override { return true; }
-	unsigned int nPorts( PortType t ) const override { return 1; }
-
-	void setInData( std::shared_ptr<NodeData>, PortIndex ) override;
-	std::shared_ptr<NodeData> outData( PortIndex = 0 ) override;
 	NodeDataType dataType( PortType, PortIndex ) const override;
-
-	std::weak_ptr<NumberData> in;
-	std::shared_ptr<Func2x1Data> out;
-	std::shared_ptr<Func2x1Data> uncomposedOut;
 };
 
-class Function2x2NodeModel : public LotonNodeModel
+class Function2x2NodeModel : public FunctionNodeModel
 { Q_OBJECT
 public:
 	Function2x2NodeModel();
 	virtual ~Function2x2NodeModel() override;
-
-	void updateOutput();
-
-signals:
-	void dataUpdatedDynamic();
+	void updateOutput() override;
 
 protected:
 	virtual QString caption() const override = 0;
 	virtual QString name() const override = 0;
 	virtual std::shared_ptr<Func2x2Data> function() = 0;
-
-	QString portCaption( PortType, PortIndex ) const override { return ""; }
-	bool portCaptionVisible( PortType, PortIndex ) const override { return true; }
-	unsigned int nPorts( PortType t ) const override { return 1; }
-
-	void setInData( std::shared_ptr<NodeData>, PortIndex ) override;
-	std::shared_ptr<NodeData> outData( PortIndex = 0 ) override;
 	NodeDataType dataType( PortType, PortIndex ) const override;
-
-	std::weak_ptr<NumberData> in;
-	std::shared_ptr<Func2x2Data> out;
-	std::shared_ptr<Func2x2Data> uncomposedOut;
 };

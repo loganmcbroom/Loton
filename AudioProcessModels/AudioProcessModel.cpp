@@ -19,7 +19,8 @@ AudioProcessModel::AudioProcessModel()
 
 	QObject::connect( this, &AudioProcessModel::dataUpdated, [this]()
 		{
-		playerModel->setAudio( std::dynamic_pointer_cast<AudioData>( outData( 0 ) ) );
+		if( out && ! std::static_pointer_cast<LotonNodeData>( out )->wipe() )
+			playerModel->setAudio( std::static_pointer_cast<AudioData>( out ) );
 		});
 
 	QObject::connect( this, &AudioProcessModel::computingStarted, playerModel.get(), &AudioPlayerModel::stop );

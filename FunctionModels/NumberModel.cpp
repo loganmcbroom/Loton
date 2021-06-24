@@ -8,8 +8,11 @@
 NumberModel::NumberModel()
 	: numberModel( new NumberSliderModel )
 	{
-	QObject::connect( numberModel.get(), &NumberSliderModel::stateChanged,
-					this, [this](){ emit dataUpdated( 0 ); } );
+	QObject::connect( numberModel.get(), &NumberSliderModel::stateChanged, this, [this]()
+		{
+		out = std::make_shared<NumberData>( numberModel->getSliderPosition() );
+		emit dataUpdated( 0 );
+		} );
 
 	auto sliderView = new NumberSliderView( numberModel.get() );
 	auto layout = new QVBoxLayout();
@@ -33,14 +36,9 @@ QString NumberModel::portCaption( PortType, PortIndex ) const { return ""; }
 
 bool NumberModel::portCaptionVisible( PortType, PortIndex ) const { return true; }
 
-void NumberModel::setInData( std::shared_ptr<NodeData>, PortIndex  )
-	{
-	Q_ASSERT_X( true, "NumberModel::setInData", "This function should never be called, but it was" );
-	}
-
 std::shared_ptr<NodeData> NumberModel::outData( QtNodes::PortIndex )
 	{
-	return std::make_shared<NumberData>( numberModel->getSliderPosition() );
+	return out;
 	}
 
 NodeDataType NumberModel::dataType( PortType, PortIndex ) const
@@ -58,4 +56,22 @@ ControllerPairs NumberModel::makeInputControllers()
 	auto slider = new NumberSliderView( numberModel.get() );
 	slider->setFixedHeight( 30 );
 	return { { "Number", slider }};
+	}
+
+void NumberModel::wipeOutputs( PortIndex )
+	{
+	out = makeWipe();
+	emit dataUpdated( 0 );
+	}
+
+QJsonObject NumberModel::save() const
+	{
+	QJsonObject modelJson = NodeDataModel::save();
+	modelJson["number"] = numberModel->save();
+	return modelJson;
+	}
+
+void NumberModel::restore( const QJsonObject & p )
+	{
+	numberModel->restore( p["number"].toObject() );
 	}

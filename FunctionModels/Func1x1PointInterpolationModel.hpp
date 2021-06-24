@@ -5,7 +5,7 @@
 class PointInterpolatorModel;
 class InterpolatorModel;
 
-class Func1x1PointInterpolationModel : public FunctionNodeModel
+class Func1x1PointInterpolationModel : public Function1x1NodeModel
 { Q_OBJECT
 public:
 	Func1x1PointInterpolationModel();

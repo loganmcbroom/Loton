@@ -89,10 +89,7 @@ std::shared_ptr<DataModelRegistry> registerDataModels()
 	auto ret = std::make_shared<DataModelRegistry>();
 
 	QString arithmeticCategory = "Arithmetic";
-	ret->registerModel<FunctionAdditionNodeModel>		( arithmeticCategory );
-	ret->registerModel<FunctionSubtractionNodeModel>	( arithmeticCategory );
-	ret->registerModel<FunctionMultiplicationNodeModel>	( arithmeticCategory );
-	ret->registerModel<FunctionDivisionNodeModel>		( arithmeticCategory );
+
 
 	QString audioProcCategory = "Audio Transforms";
 	ret->registerModel<AudioConvertToFunctionModel>		( audioProcCategory );
@@ -139,6 +136,11 @@ std::shared_ptr<DataModelRegistry> registerDataModels()
 	ret->registerModel<LuaFunc2x1Model>					( functionCategory );
 	ret->registerModel<LuaFunc2x2Model>					( functionCategory );
 	ret->registerModel<NumberModel>						( functionCategory );
+
+	ret->registerModel<FunctionAdditionNodeModel>		( functionCategory );
+	ret->registerModel<FunctionSubtractionNodeModel>	( functionCategory );
+	ret->registerModel<FunctionMultiplicationNodeModel>	( functionCategory );
+	ret->registerModel<FunctionDivisionNodeModel>		( functionCategory );
 	//ret->registerModel<PointsInPlaneTestModel>			( functionCategory );
 
 	QString PVOCCategory = "PVOC Transforms";

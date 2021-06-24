@@ -9,7 +9,7 @@
 #include "NodeDataTypes/InterpolatorData.hpp"
 
 Func1x1PointInterpolationModel::Func1x1PointInterpolationModel()
-	: FunctionNodeModel()
+	: Function1x1NodeModel()
 	, piModel( new PointInterpolatorModel() )
 	{
 	auto mainLayout = new QHBoxLayout( mainWidget );

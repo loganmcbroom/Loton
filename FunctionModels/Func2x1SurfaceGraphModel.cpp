@@ -51,16 +51,22 @@ QString Func2x1SurfaceGraphModel::portCaption( PortType, PortIndex ) const
 	return "Func2x1";
 	}
 
-void Func2x1SurfaceGraphModel::setInData( std::shared_ptr<NodeData> data, PortIndex )
+void Func2x1SurfaceGraphModel::inputsUpdated( std::shared_ptr<NodeData> data, PortIndex )
 	{
-	in = std::dynamic_pointer_cast<Func2x1Data>( data );
-	graphModel->setFunction( in );
+	out = ins[0];
+	graphModel->setFunction( std::static_pointer_cast<Func2x1Data>( ins[0] ) );
+	emit dataUpdated( 0 );
+	}
+
+void Func2x1SurfaceGraphModel::wipeOutputs( PortIndex )
+	{
+	out = makeWipe();
 	emit dataUpdated( 0 );
 	}
 
 std::shared_ptr<NodeData> Func2x1SurfaceGraphModel::outData( PortIndex )
 	{
-	return in;
+	return out;
 	}
 
 NodeDataType Func2x1SurfaceGraphModel::dataType( PortType, PortIndex ) const

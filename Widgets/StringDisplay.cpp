@@ -20,6 +20,7 @@ QString StringDisplayModel::string() const
 void StringDisplayModel::setString( const QString & newString )
 	{
 	_string = newString;
+	emit stringUpdated();
 	//pushStateChange( "String changed" );
 	}
 
@@ -45,7 +46,8 @@ StringDisplayView::StringDisplayView( StringDisplayModel * _model )
 	setLayout( new QHBoxLayout );
 	layout()->setMargin( 0 );
 
-	QObject::connect( model, &StringDisplayModel::stateChanged, this, [this](){ repaint(); });
+	QObject::connect( model, &StringDisplayModel::stateChanged, this, [this](){ repaint(); } );
+	QObject::connect( model, &StringDisplayModel::stringUpdated, this, [this](){ repaint(); } );
 	}
 
 void StringDisplayView::paintEvent( QPaintEvent * )

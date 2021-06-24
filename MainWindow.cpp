@@ -100,7 +100,11 @@ bool MainWindow::save()
 
 	bool saved = centralWidgetManager->centralWidget->flowScene->save( Settings::currentProjectPath() );
 	if( saved )
+		{
 		LotonController::manager().undoStack->setClean();
+		if( Settings::get() )
+			Settings::get()->saveToRegistry();
+		}
 	return saved;
     }
 

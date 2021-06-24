@@ -12,7 +12,7 @@ class FunctionGeneratorPlotModel;
  * Base class for nodes that create functions from slider inputs
  */
 
-class FunctionGeneratorNodeModel : public FunctionNodeModel
+class FunctionGeneratorNodeModel : public Function1x1NodeModel
 { Q_OBJECT
 public:
 	FunctionGeneratorNodeModel();

@@ -5,7 +5,7 @@
 class FunctionGeneratorPlotModel;
 class TextEditorModel;
 
-class LuaFunc1x1Model : public FunctionNodeModel
+class LuaFunc1x1Model : public Function1x1NodeModel
 {
 public:
 	LuaFunc1x1Model();

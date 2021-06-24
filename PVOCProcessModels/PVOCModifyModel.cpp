@@ -1,21 +1,23 @@
 #include "PVOCModifyModel.hpp"
 
+#include "flan/CLContext.h"
+
 #include "Widgets/Interpolator.hpp"
 
 #include "NodeDataTypes/PVOCData.hpp"
 #include "NodeDataTypes/FunctionData.hpp"
 #include "NodeDataTypes/InterpolatorData.hpp"
 
-
 PVOCModifyModel::PVOCModifyModel()
 	: PVOCProcessModel()
 	, interpModel( new InterpolatorModel() )
-	, deviceSelectorModel( new LotonComboBoxModel( 1, {"gpu", "cpu"} ) )
+	, deviceSelectorModel( new LotonComboBoxModel( 0, { "cpu", "gpu" } ) )
 	{
-	QObject::connect( interpModel.get(), &InterpolatorModel::stateChanged,
-					this, &PVOCModifyModel::updateData );
-	QObject::connect( deviceSelectorModel.get(), &InterpolatorModel::stateChanged,
-					this, &PVOCModifyModel::updateData );
+	if( flan::isOpenCLAvailable() )
+		deviceSelectorModel->setSelection( 1 );
+
+	QObject::connect( interpModel.get(), &InterpolatorModel::stateChanged, this, &PVOCModifyModel::updateData );
+	QObject::connect( deviceSelectorModel.get(), &InterpolatorModel::stateChanged, this, &PVOCModifyModel::updateData );
 	}
 
 bool PVOCModifyModel::process()
@@ -26,7 +28,7 @@ bool PVOCModifyModel::process()
 	auto mod = std::dynamic_pointer_cast<Func2x2Data>( ins[1] );
 	auto interp = tryLockingInput<InterpolatorData>( ins[2], interpModel->getInterpolator() );
 
-	bool useCPU = deviceSelectorModel->selection() == 1;
+	bool useCPU = deviceSelectorModel->selection() == 0;
 
 	setFunctor( [in, mod, interp, useCPU, c = canceller]()
 		{
@@ -89,10 +91,12 @@ NodeDataType PVOCModifyModel::dataType( PortType type, PortIndex index ) const
 
 ControllerPairs PVOCModifyModel::makeInputControllers()
 	{
-	return {
-		{ portCaption( PortType::In, 2 ), new LotonComboBoxView( interpModel.get() ) },
-		{ "Compute Device", new LotonComboBoxView( deviceSelectorModel.get() ) }
-		};
+	ControllerPairs ps;
+	ps.push_back( { portCaption( PortType::In, 2 ), new LotonComboBoxView( interpModel.get() ) } );
+	if( flan::isOpenCLAvailable() )
+		ps.push_back( { "Compute Device", new LotonComboBoxView( deviceSelectorModel.get() ) } );
+
+	return ps;
 	}
 
 QJsonObject PVOCModifyModel::save() const
@@ -107,6 +111,9 @@ void PVOCModifyModel::restore( QJsonObject const & p )
 	{
 	interpModel->restore( p["interpolator"].toObject() );
 	deviceSelectorModel->restore( p["device"].toObject() );
+
+	if( ! flan::isOpenCLAvailable() )
+		deviceSelectorModel->setSelection( 0 );
 	}
 
 

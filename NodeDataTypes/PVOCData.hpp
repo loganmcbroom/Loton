@@ -1,12 +1,10 @@
 #pragma once
 
-#include "TaggedNodeData.hpp"
+#include "LotonNodeData.hpp"
 
 #include <flan/PVOC.h>
 
-using QtNodes::NodeDataType;
-
-class PVOCData : public TaggedNodeData
+class PVOCData : public LotonNodeData
 {
 public:
 	PVOCData() : flan() {}

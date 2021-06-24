@@ -1,12 +1,10 @@
 #pragma once
 
-#include <nodes/NodeDataModel>
+#include "LotonNodeData.hpp"
 
 #include <flan/Audio.h>
 
-using QtNodes::NodeDataType;
-
-class AudioData : public QtNodes::NodeData
+class AudioData : public LotonNodeData
 {
 public:
 	AudioData() : audio() {}

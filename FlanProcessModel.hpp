@@ -45,16 +45,13 @@ public slots:
 	void updateData();
 
 protected:
-
 	std::shared_ptr<NodeData> outData( PortIndex = 0 ) override; // Returns nullptr if there is no data
 	QtNodes::NodePainterDelegate * painterDelegate() const override;
 	virtual void inputConnectionDeleted( PortIndex ) override; //Clears input pointers on disconnect
 	void setValidationState( QtNodes::NodeValidationState state, QString msg ) override;
-	virtual void setInData( std::shared_ptr<NodeData> data, PortIndex ) override;
+	void inputsUpdated( std::shared_ptr<NodeData> data, PortIndex ) override;
+	void wipeOutputs( PortIndex ) override;
 	//bool isProcessing() const;
-
-	// Inputs
-	std::vector<std::shared_ptr<NodeData>> ins;
 
 	// Outputs (assuming single output for now)
 	std::shared_ptr<NodeData> out;
@@ -67,15 +64,6 @@ protected:
 	QVBoxLayout * mainLayout;
 
 	std::unique_ptr<LED> indicator;
-
-	//Utility used in derived classes
-	template<typename T, typename S>
-	static std::shared_ptr<T> tryLockingInput( std::shared_ptr<NodeData> input, S other )
-		{
-		return input?
-			std::dynamic_pointer_cast<T>( input ) :
-			std::make_shared<T>( other );
-		}
 
 private:
 	bool portCaptionVisible( PortType, PortIndex ) const override;

@@ -24,7 +24,6 @@ struct FlanProcessModel::PainterDelegate : public NodePainterDelegate
 
 FlanProcessModel::FlanProcessModel()
 	: LotonNodeModel()
-	, ins()
 	, out( nullptr )
 	, outFuture( nullptr )
 	, outWatcher( nullptr )
@@ -93,6 +92,10 @@ void FlanProcessModel::updateData()
 			}
 		*c = true;
 		} );
+
+	// Don't process wipe commands
+	if( hasWipedInput() ) return;
+
 	timeoutTimer->start();
 
 	bool accepted = process();
@@ -109,11 +112,15 @@ void FlanProcessModel::updateData()
 		}
 	}
 
-void FlanProcessModel::setInData( std::shared_ptr<NodeData> data, PortIndex index )
+void FlanProcessModel::inputsUpdated( std::shared_ptr<NodeData> data, PortIndex index )
 	{
-	ins.resize( nPorts( PortType::In ) );
-	ins[index] = data;
 	updateData();
+	}
+
+void FlanProcessModel::wipeOutputs( PortIndex )
+	{
+	out = makeWipe();
+	emit dataUpdated( 0 );
 	}
 
 std::shared_ptr<NodeData> FlanProcessModel::outData( PortIndex )

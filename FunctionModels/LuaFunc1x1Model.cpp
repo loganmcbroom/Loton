@@ -21,7 +21,10 @@ LuaFunc1x1Model::LuaFunc1x1Model()
 	plotView->setFixedSize( 120, 120 );
 	plotView->setStyleSheet( "QwtPlot { border: 1px solid white; }" );
 
-	QObject::connect( this, &LuaFunc1x1Model::dataUpdatedDynamic, plotModel, [this]() { plotModel->setOut( out ); } );
+	QObject::connect( this, &LuaFunc1x1Model::dataUpdatedDynamic, plotModel, [this]()
+		{
+		plotModel->setOut( std::static_pointer_cast<Func1x1Data>( out ) );
+		} );
 
 	QObject::connect( editor.get(), &TextEditorModel::stateChanged, this, [this]()
 		{

@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = xloom
+TARGET = Loton
 
 QT = core gui multimedia concurrent datavisualization
 
@@ -72,8 +72,9 @@ HEADERS += \
 	NodeControlPanel.hpp \
 	NodeDataTypes/FunctionData.hpp \
 	NodeDataTypes/InterpolatorData.hpp \
+	NodeDataTypes/LotonNodeData.hpp \
 	NodeDataTypes/NumberData.hpp \
-	NodeDataTypes/TaggedNodeData.hpp \
+	NodeDataTypes/WipeNodeData.hpp \
 	PVOCProcessModels/PVOCAddOctavesModel.hpp \
 	PVOCProcessModels/PVOCConvertToAudioModel.hpp \
 	PVOCProcessModels/PVOCDesampleModel.hpp \
@@ -200,8 +201,8 @@ SOURCES += \
 	LotonNodeModel.cpp \
 	MainWindow.cpp \
 	NodeControlPanel.cpp \
+	NodeDataTypes/LotonNodeData.cpp \
 	NodeDataTypes/PVOCData.cpp \
-	NodeDataTypes/TaggedNodeData.cpp \
 	PVOCProcessModels/PVOCAddOctavesModel.cpp \
 	PVOCProcessModels/PVOCConvertToAudioModel.cpp \
 	PVOCProcessModels/PVOCDesampleModel.cpp \
@@ -257,9 +258,9 @@ RESOURCES += \
 
 
 #nodeeditor
-DEFINES += NODE_EDITOR_STATIC #C:/libs/build-nodeeditor-master-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug/lib
-	 win32:CONFIG(release, debug|release): LIBS += -LC:/libs/build-nodeeditor-master-Desktop_Qt_5_15_0_MSVC2019_64bit-Release/lib/ -lnodes
-else:win32:CONFIG(debug,   debug|release): LIBS += -LC:/libs/build-nodeeditor-master-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug/lib/ -lnodes
+DEFINES += NODE_EDITOR_STATIC
+	 win32:CONFIG(release, debug|release): LIBS += -LC:/libs/build-nodeeditor-fork-Desktop_x64_windows_msvc2019_pe_64bit-Release/lib/ -lnodes
+else:win32:CONFIG(debug,   debug|release): LIBS += -LC:/libs/build-nodeeditor-fork-Desktop_x64_windows_msvc2019_pe_64bit-Debug/lib/ -lnodes
 INCLUDEPATH += C:/libs/nodeeditor-master/include
 DEPENDPATH += C:/libs/nodeeditor-master/include
 

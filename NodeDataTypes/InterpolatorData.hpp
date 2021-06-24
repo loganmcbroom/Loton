@@ -1,12 +1,10 @@
 #pragma once
 
-#include <nodes/NodeDataModel>
+#include "LotonNodeData.hpp"
 
 #include <flan/Function.h>
 
-using QtNodes::NodeDataType;
-
-class InterpolatorData : public QtNodes::NodeData
+class InterpolatorData : public LotonNodeData
 {
 public:
 	InterpolatorData() : f( flan::Interpolators::linear ) {}

@@ -5,6 +5,8 @@
 #include "MainWindow.hpp"
 #include "CentralWidget.hpp"
 #include "NodeControlPanel.hpp"
+#include "NodeDataTypes/LotonNodeData.hpp"
+#include "NodeDataTypes/WipeNodeData.hpp"
 
 using namespace QtNodes;
 
@@ -13,6 +15,7 @@ LotonNodeModel::LotonNodeModel()
 	, _embeddedWidget( new QWidget )
 	, modelValidationState( NodeValidationState::Valid )
 	, modelValidationError( "" )
+	, ins( 1 )
 	//, controllers()
 	{
 	//Layout and styling
@@ -29,6 +32,22 @@ LotonNodeModel::~LotonNodeModel()
 	auto panel = MainWindow::getInstance()->centralWidgetManager->centralWidget->controlPanel;
 	if( panel->activeNode() == this )
 		panel->setActiveNode( nullptr );
+	}
+
+void LotonNodeModel::setInData( std::shared_ptr<NodeData> data, PortIndex i )
+	{
+	ins.resize( nPorts( PortType::In ) );
+	ins[i] = std::static_pointer_cast<LotonNodeData>( data );
+	if( ins[i] && ins[i]->wipe() )
+		{
+		// Wipe inputs?
+//		for( auto & in : ins )
+//			in = makeWipe();
+		wipeOutputs( i );
+		}
+	// If any input is connected but wiped, don't process
+	if( ! hasWipedInput() )
+		inputsUpdated( data, i );
 	}
 
 //QJsonObject LotonNodeModel::save() const
@@ -48,6 +67,16 @@ LotonNodeModel::~LotonNodeModel()
 void LotonNodeModel::clicked()
 	{
 	MainWindow::setActiveNode( this );
+	}
+
+std::shared_ptr<LotonNodeData> LotonNodeModel::makeWipe() const
+	{
+	return std::make_shared<WipeNodeData>();
+	}
+
+bool LotonNodeModel::hasWipedInput() const
+	{
+	return std::any_of( ins.begin(), ins.end(), []( std::shared_ptr<LotonNodeData> a ){ return a && a->wipe(); } );
 	}
 
 void LotonNodeModel::setValidationState( QtNodes::NodeValidationState state, QString msg )

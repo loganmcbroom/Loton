@@ -1,17 +1,23 @@
 #include "PVOCModifyFrequencyModel.hpp"
 
+#include "flan/CLContext.h"
+
 #include "Widgets/Interpolator.hpp"
 
 #include "NodeDataTypes/PVOCData.hpp"
 #include "NodeDataTypes/FunctionData.hpp"
 #include "NodeDataTypes/InterpolatorData.hpp"
 
-
 PVOCModifyFrequencyModel::PVOCModifyFrequencyModel()
 	: PVOCProcessModel()
 	, interpModel( new InterpolatorModel() )
-	, deviceSelectorModel( new LotonComboBoxModel( 1, {"cpu", "gpu"} ) )
+	, deviceSelectorModel( new LotonComboBoxModel( 0, { "cpu", "gpu" } ) )
 	{
+	if( flan::isOpenCLAvailable() )
+		deviceSelectorModel->setSelection( 1 );
+
+	QObject::connect( interpModel.get(), &InterpolatorModel::stateChanged, this, &PVOCModifyFrequencyModel::updateData );
+	QObject::connect( deviceSelectorModel.get(), &LotonComboBoxModel::stateChanged, this, &PVOCModifyFrequencyModel::updateData );
 	}
 
 bool PVOCModifyFrequencyModel::process()
@@ -85,10 +91,12 @@ NodeDataType PVOCModifyFrequencyModel::dataType( PortType type, PortIndex index 
 
 ControllerPairs PVOCModifyFrequencyModel::makeInputControllers()
 	{
-	return {
-		{ portCaption( PortType::In, 2 ), new LotonComboBoxView( interpModel.get() ) },
-		{ "Compute Device", new LotonComboBoxView( deviceSelectorModel.get() ) }
-		};
+	ControllerPairs ps;
+	ps.push_back( { portCaption( PortType::In, 2 ), new LotonComboBoxView( interpModel.get() ) } );
+	if( flan::isOpenCLAvailable() )
+		ps.push_back( { "Compute Device", new LotonComboBoxView( deviceSelectorModel.get() ) } );
+
+	return ps;
 	}
 
 QJsonObject PVOCModifyFrequencyModel::save() const
@@ -103,6 +111,9 @@ void PVOCModifyFrequencyModel::restore( QJsonObject const & p )
 	{
 	interpModel->restore( p["interpolator"].toObject() );
 	deviceSelectorModel->restore( p["device"].toObject() );
+
+	if( ! flan::isOpenCLAvailable() )
+		deviceSelectorModel->setSelection( 0 );
 	}
 
 

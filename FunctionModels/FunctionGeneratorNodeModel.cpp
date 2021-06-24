@@ -10,7 +10,7 @@
 using namespace QtNodes;
 
 FunctionGeneratorNodeModel::FunctionGeneratorNodeModel()
-	: FunctionNodeModel()
+	: Function1x1NodeModel()
 	, sliders()
 	, plotModel( nullptr )
 	{
@@ -58,7 +58,7 @@ void FunctionGeneratorNodeModel::initialize()
 	QObject::connect( this, &FunctionGeneratorNodeModel::dataUpdatedDynamic, plotModel, [this]()
 		{
 		if( out && !graphFunction )
-			plotModel->setOut( uncomposedOut );
+			plotModel->setOut( std::static_pointer_cast<Func1x1Data>( uncomposedOut ) );
 		else
 			plotModel->setOut( graphFunction );
 		} );

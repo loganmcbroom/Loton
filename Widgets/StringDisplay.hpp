@@ -9,12 +9,15 @@ class QLineEdit;
 class QLabel;
 
 class StringDisplayModel : public LotonController
-{
+{ Q_OBJECT
 public:
 	StringDisplayModel( const QString & initial );
 
 	QString string() const;
 	void setString( const QString & );
+
+signals:
+	void stringUpdated();
 
 private:
 	QString _string;

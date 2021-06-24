@@ -1,10 +1,8 @@
 #pragma once
 
-#include <nodes/NodeDataModel>
+#include "LotonNodeData.hpp"
 
-using QtNodes::NodeDataType;
-
-class NumberData : public QtNodes::NodeData
+class NumberData : public LotonNodeData
 {
 public:
 	NumberData() : f( 0 ) {}
