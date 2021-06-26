@@ -29,13 +29,13 @@ bool PVOCSubtractAmplitudesModel::process()
 	{
 	if( ! ins[0] || ! ins[1] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto other = std::dynamic_pointer_cast<PVOCData>( ins[1] );
 	auto amount = tryLockingInput<Func2x1Data>( ins[2], sliderModel->getSliderPosition() );
 
 	setFunctor( [in, other, amount, c = canceller]()
 		{
-		return std::make_shared<PVOCData>( in.subtractAmplitudes( other->flan, amount->f, *c ) );
+		return std::make_shared<PVOCData>( in.subtractAmplitudes( other->pvoc, amount->f, *c ) );
 		} );
 
 	return true;

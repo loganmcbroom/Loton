@@ -52,10 +52,8 @@ SettingsMenu::SettingsMenu( QWidget * parent )
 	exitIcon.addFile( ":Media/close-icon-w.png" );
 	exitButton->setIcon( exitIcon );
 	exitButton->setStyleSheet( "QPushButton { border: 0px; }" );
-	QObject::connect( exitButton, &QPushButton::clicked,
-		this, &SettingsMenu::done );
-	QObject::connect( this, &SettingsMenu::done,
-		Settings::get(), &Settings::saveToRegistry );
+	QObject::connect( exitButton, &QPushButton::clicked, this, &SettingsMenu::done );
+	QObject::connect( this, &SettingsMenu::done, Settings::get(), &Settings::saveToRegistry );
 	header->layout()->addWidget( exitButton );
 
 	//Box setup
@@ -126,6 +124,18 @@ SettingsMenu::SettingsMenu( QWidget * parent )
 		for( auto i : colorButtons )
 			setButtonColor( i, defaultPalette.color( i->role ) );
 		});
+
+	// Use gpu button setup
+	auto useOpenCLButton = new QPushButton();
+	boxes[3]->addWidget( useOpenCLButton );
+	useOpenCLButton->setCheckable( true );
+	useOpenCLButton->setChecked( Settings::useOpenCL() );
+	useOpenCLButton->setText( "Use GPU Acceleration?" );
+	QObject::connect( useOpenCLButton, &QPushButton::toggled, []( bool checked )
+		{
+		Settings::setUseOpenCL( checked );
+		} );
+	useOpenCLButton->setStyleSheet( "QPushButton{ background-color:red; padding:6px; } QPushButton:checked{ background-color:green; }" );
 	}
 
 void SettingsMenu::paintMenu( const QPalette & pal )

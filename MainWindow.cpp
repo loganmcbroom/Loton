@@ -72,6 +72,8 @@ MainWindow::MainWindow()
 		{
 		centralWidgetManager->centralWidget->flowScene->load( Settings::currentProjectPath() );
 		}
+
+	LotonController::manager().undoStack->setClean();
     }
 
 void MainWindow::open( QString filename )

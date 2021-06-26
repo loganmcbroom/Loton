@@ -20,7 +20,7 @@ signals:
 	void dataUpdated( std::shared_ptr<PVOCData> );
 
 private:
-	std::shared_ptr<PVOCData> flan;
+	std::shared_ptr<PVOCData> pvoc;
 };
 
 class SpectrographIconView : public QLabel

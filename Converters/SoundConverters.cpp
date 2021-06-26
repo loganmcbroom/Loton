@@ -89,7 +89,7 @@ void AudioToPVOCConverter::convertWithCanceller( std::shared_ptr<NodeData> data,
 void PVOCToAudioConverter::convertWithCanceller( std::shared_ptr<NodeData> data, size_t, size_t, size_t,
 	std::shared_ptr<std::atomic<bool>> c )
 	{
-	auto flanData = std::dynamic_pointer_cast<PVOCData>( data );
+	auto pvocData = std::dynamic_pointer_cast<PVOCData>( data );
 
 	// The current conversion is no longer needed.
 	// Cancel it and let it self-delete when finished
@@ -99,10 +99,10 @@ void PVOCToAudioConverter::convertWithCanceller( std::shared_ptr<NodeData> data,
 		conversion = nullptr;
 		}
 
-	if( flanData )
+	if( pvocData )
 		{
 		//Handler will self delete when computation completes
-		conversion = new PVOCToAudioConversion( flanData, c );
+		conversion = new PVOCToAudioConversion( pvocData, c );
 
 		//When the conversion finishes, we also finish
 		QObject::connect( conversion, &FFTConversion::finished,
@@ -153,20 +153,26 @@ AudioToPVOCConversion::AudioToPVOCConversion( std::shared_ptr<AudioData> audioDa
 	: FFTConversion( fftSize, c )
 	{
 	out.reset( new QFuture<std::shared_ptr<NodeData>>( QtConcurrent::run(
-		[this, audioData, windowSize, hopSize, fftSize, c]()
+		[this, audioData, windowSize, hopSize, fftSize, useGPU = Settings::useOpenCL(), c]()
 			{
-			return std::shared_ptr<NodeData>( new PVOCData( audioData->audio.convertToPVOC( windowSize, hopSize, fftSize, fft, *c ) ) );
+			return std::shared_ptr<NodeData>( new PVOCData( useGPU?
+				audioData->audio.convertToPVOC( windowSize, hopSize, fftSize, fft, *c ) :
+				audioData->audio.convertToPVOC_cpu( windowSize, hopSize, fftSize, fft, *c )
+				) );
 			} ) ) );
 	outWatcher.setFuture( *out );
 	}
 
-PVOCToAudioConversion::PVOCToAudioConversion( std::shared_ptr<PVOCData> flanData, std::shared_ptr<std::atomic<bool>> c )
-	: FFTConversion( flanData->flan.getDFTSize(), c )
+PVOCToAudioConversion::PVOCToAudioConversion( std::shared_ptr<PVOCData> pvocData, std::shared_ptr<std::atomic<bool>> c )
+	: FFTConversion( pvocData->pvoc.getDFTSize(), c )
 	{
 	out.reset( new QFuture<std::shared_ptr<NodeData>>( QtConcurrent::run(
-		[this, flanData, c]()
+		[this, pvocData, useGPU = Settings::useOpenCL(), c]()
 			{
-			return std::shared_ptr<NodeData>( new AudioData( flanData->flan.convertToAudio( fft, *c ) ) );
+			return std::shared_ptr<NodeData>( new AudioData( useGPU ?
+				pvocData->pvoc.convertToAudio( fft, *c ) :
+				pvocData->pvoc.convertToAudio_cpu( fft, *c )
+				) );
 			} ) ) );
 	outWatcher.setFuture( *out );
 	}

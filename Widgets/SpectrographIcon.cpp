@@ -18,7 +18,7 @@ SpectrographIconModel:: SpectrographIconModel()
 
 void SpectrographIconModel::setPVOC( std::shared_ptr<PVOCData> in )
 	{
-	flan = in;
+	pvoc = in;
 	emit dataUpdated( in );
 	}
 
@@ -42,7 +42,7 @@ SpectrographIconView::SpectrographIconView( SpectrographIconModel * _model )
 //			repaint();
 //			}
 //		} );
-	updateData( model->flan );
+	updateData( model->pvoc );
 	}
 
 QImage SpectrographIconView::getIcon() const
@@ -66,7 +66,7 @@ void SpectrographIconView::updateData( std::shared_ptr<PVOCData> in )
 		const float timelineScale = currentSize.height() > 64 ?
 			std::min( currentSize.width() * .025f, 12.0f )
 			: 0;
-		return in->flan.convertToGraph( flan::Rect( 0, 0, -1, -1 ), currentSize.width(), currentSize.height(), timelineScale, *c );
+		return in->pvoc.convertToGraph( flan::Rect( 0, 0, -1, -1 ), currentSize.width(), currentSize.height(), timelineScale, *c );
 		});
 
 	QObject::connect( &watcher, &QFutureWatcher<QImage>::finished,
@@ -83,14 +83,14 @@ void SpectrographIconView::onDataUpdated()
 void SpectrographIconView::resizeEvent( QResizeEvent * e )
 	{
 	QWidget::resizeEvent( e );
-	updateData( model->flan );
+	updateData( model->pvoc );
 	}
 
 void SpectrographIconView::mousePressEvent( QMouseEvent * event )
 	{
-	if( model && model->flan )
+	if( model && model->pvoc )
 		{
-		flan::PVOC * pPVOC = &model->flan->flan;
+		flan::PVOC * pPVOC = &model->pvoc->pvoc;
 
 		QMimeData * mimeData = new QMimeData;
 		auto bytes = QByteArray::fromRawData( (char*) &pPVOC, sizeof( pPVOC ) );

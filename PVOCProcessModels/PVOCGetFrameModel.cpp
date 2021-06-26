@@ -31,7 +31,7 @@ bool PVOCGetFrameModel::process()
 	{
 	if( ! ins[0] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto t = tryLockingInput<NumberData>( ins[1], frameTimeModel->getSliderPosition() );
 
 	setFunctor( [in, t]()

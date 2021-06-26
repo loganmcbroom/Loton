@@ -22,7 +22,7 @@ bool PVOCSelectModel::process()
 	{
 	if( ! ins[0] || ! ins[2] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto length = tryLockingInput<NumberData>( ins[1], lengthModel->getSliderPosition() );
 	auto selector = std::dynamic_pointer_cast<Func2x2Data>( ins[2] );
 	auto interp = tryLockingInput<InterpolatorData>( ins[3], interpModel->getInterpolator() );

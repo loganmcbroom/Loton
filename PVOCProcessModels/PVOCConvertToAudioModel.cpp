@@ -28,6 +28,13 @@ PVOCConvertToAudioModel::PVOCConvertToAudioModel()
 //	stringSetup( overlapsModel.get() );
 
 	mainWidget->setMinimumWidth( 64 );
+
+	QObject::connect( converter.get(), &PVOCToAudioConverter::finished, this, [this]( std::shared_ptr<NodeData> data )
+		{
+		out = data;
+		emit computingFinished();
+		emit dataUpdated( 0 );
+		} );
 	}
 
 PVOCConvertToAudioModel::~PVOCConvertToAudioModel() = default;
@@ -46,14 +53,6 @@ bool PVOCConvertToAudioModel::process()
 
 	converter->convertWithCanceller( in, 0, 0, 0, canceller );
 	emit computingStarted();
-
-	QObject::connect( converter.get(), &PVOCToAudioConverter::finished,
-			this, [this]( std::shared_ptr<NodeData> data )
-		{
-		out = data;
-		emit computingFinished();
-		emit dataUpdated( 0 );
-		} );
 
 	return true;
 	}

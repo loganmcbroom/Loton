@@ -1,19 +1,18 @@
 #include "PVOCModifyModel.hpp"
 
-#include "flan/CLContext.h"
-
 #include "Widgets/Interpolator.hpp"
 
 #include "NodeDataTypes/PVOCData.hpp"
 #include "NodeDataTypes/FunctionData.hpp"
 #include "NodeDataTypes/InterpolatorData.hpp"
+#include "Settings.hpp"
 
 PVOCModifyModel::PVOCModifyModel()
 	: PVOCProcessModel()
 	, interpModel( new InterpolatorModel() )
 	, deviceSelectorModel( new LotonComboBoxModel( 0, { "cpu", "gpu" } ) )
 	{
-	if( flan::isOpenCLAvailable() )
+	if( Settings::useOpenCL() )
 		deviceSelectorModel->setSelection( 1 );
 
 	QObject::connect( interpModel.get(), &InterpolatorModel::stateChanged, this, &PVOCModifyModel::updateData );
@@ -24,17 +23,17 @@ bool PVOCModifyModel::process()
 	{
 	if( ! ins[0] || ! ins[1] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto mod = std::dynamic_pointer_cast<Func2x2Data>( ins[1] );
 	auto interp = tryLockingInput<InterpolatorData>( ins[2], interpModel->getInterpolator() );
 
-	bool useCPU = deviceSelectorModel->selection() == 0;
+	const bool useGPU = deviceSelectorModel->selection() == 1 && Settings::useOpenCL();
 
-	setFunctor( [in, mod, interp, useCPU, c = canceller]()
+	setFunctor( [in, mod, interp, useGPU, c = canceller]()
 		{
-		return std::shared_ptr<NodeData>( new PVOCData( useCPU?
-			in.modify( mod->f, interp->f, *c ) :
-			in.modify_cl( mod->f, interp->f, *c )
+		return std::shared_ptr<NodeData>( new PVOCData( useGPU?
+			in.modify_cl( mod->f, interp->f, *c ) :
+			in.modify( mod->f, interp->f, *c )
 			) );
 		});
 
@@ -93,7 +92,7 @@ ControllerPairs PVOCModifyModel::makeInputControllers()
 	{
 	ControllerPairs ps;
 	ps.push_back( { portCaption( PortType::In, 2 ), new LotonComboBoxView( interpModel.get() ) } );
-	if( flan::isOpenCLAvailable() )
+	if( Settings::useOpenCL() )
 		ps.push_back( { "Compute Device", new LotonComboBoxView( deviceSelectorModel.get() ) } );
 
 	return ps;
@@ -112,7 +111,7 @@ void PVOCModifyModel::restore( QJsonObject const & p )
 	interpModel->restore( p["interpolator"].toObject() );
 	deviceSelectorModel->restore( p["device"].toObject() );
 
-	if( ! flan::isOpenCLAvailable() )
+	if( ! Settings::useOpenCL() )
 		deviceSelectorModel->setSelection( 0 );
 	}
 

@@ -19,14 +19,18 @@ public:
 	static QString & samplesPath();
 	static QString & projectsPath();
 	static QString & currentProjectPath();
+
 	static size_t PVOCWindowSize(); // Number of frames processed per hop, default is 2048
 	static size_t PVOCHopSize(); // Number of frames to hop, default is 128
 	static size_t PVOCFFTSize(); // This is stored as the exponent of 2 to use, default 12 (2^12 = 4096)
 	static size_t processTimeout(); // Number of milliseconds before process times out
+	static bool useOpenCL();
+
 	static void setPVOCWindowSize( int newWindowSize );
 	static void setPVOCHopSize( int newHopSize );
 	static void setPVOCFFTSize( int newFFTSize );
 	static void setProcessTimeout( int ms );
+	static void setUseOpenCL( bool newUseOpenCL );
 
 signals:
 	void paletteUpdated( QPalette::ColorRole );

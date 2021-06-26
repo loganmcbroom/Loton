@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QDebug>
 
+#include "flan/CLContext.h"
+
 bool Settings::instanceExists = false;
 
 class Settings::impl
@@ -39,6 +41,8 @@ public:
 	size_t defaultTimeout;
 	size_t timeout;
 
+	bool useOpenCL = false;
+
 	QString samplesPath;
 	QString projectsPath;
 	QString currentProjectPath;
@@ -65,6 +69,7 @@ Settings::Settings()
 	if( ! s.contains( "PVOC/hopSize"		) ) s.setValue( "PVOC/hopSize",			pImpl->defaultPVOCHopSize );
 	if( ! s.contains( "PVOC/fftSize"		) ) s.setValue( "PVOC/fftSize",			pImpl->defaultPVOCFFTSize );
 	if( ! s.contains( "timeout"				) ) s.setValue( "timeout",				pImpl->defaultTimeout );
+	if( ! s.contains( "useOpenCL"			) ) s.setValue( "useOpenCL",			true );
 
 	//Read settings from registry
 	pImpl->pal.setColor( QPalette::Highlight,	s.value( "Palette/Highlight" ).value<QColor>() );
@@ -79,6 +84,7 @@ Settings::Settings()
 	pImpl->PVOCHopSize			= s.value( "PVOC/hopSize"		).value<size_t>();
 	pImpl->PVOCFFTSize			= s.value( "PVOC/fftSize"		).value<size_t>();
 	pImpl->timeout				= s.value( "timeout"			).value<size_t>();
+	pImpl->useOpenCL			= s.value( "useOpenCL"			).value<bool>();
 	}
 
 void Settings::saveToRegistry()
@@ -98,6 +104,7 @@ void Settings::saveToRegistry()
 	s.setValue( "PVOC/hopSize",			pImpl->PVOCHopSize );
 	s.setValue( "PVOC/fftSize",			pImpl->PVOCFFTSize );
 	s.setValue( "timeout",				pImpl->timeout );
+	s.setValue( "useOpenCL",			pImpl->useOpenCL );
 	}
 
 Settings::~Settings()
@@ -172,6 +179,9 @@ void Settings::setPVOCFFTSize( int newFFTSize )	{ get()->pImpl->PVOCFFTSize = ne
 
 size_t Settings::processTimeout() { return get()->pImpl->timeout; }
 void Settings::setProcessTimeout( int newMs ) {	get()->pImpl->timeout = newMs; }
+
+bool Settings::useOpenCL() { return get()->pImpl->useOpenCL && flan::isOpenCLAvailable(); }
+void Settings::setUseOpenCL( bool newUseOpenCL ) { get()->pImpl->useOpenCL = newUseOpenCL; }
 
 Settings * Settings::get()
 	{

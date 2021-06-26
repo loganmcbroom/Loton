@@ -30,7 +30,7 @@ bool PVOCDesampleModel::process()
 	{
 	if( ! ins[0] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto factor = tryLockingInput<Func2x1Data>( ins[1], factorModel->getSliderPosition() );
 	auto interp = tryLockingInput<InterpolatorData>( ins[2], interpModel->getInterpolator() );
 

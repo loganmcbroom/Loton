@@ -29,6 +29,13 @@ AudioConvertToPVOCModel::AudioConvertToPVOCModel()
 
 	fftSizeModel->setFilter( [this]( float x ) { return std::round( x ); } );
 	QObject::connect( fftSizeModel.get(), &NumberSliderModel::stateChanged, this, &AudioConvertToPVOCModel::updateData );
+
+	QObject::connect( converter.get(), &AudioToPVOCConverter::finished, this, [this]( std::shared_ptr<NodeData> data )
+		{
+		out = data;
+		emit computingFinished();
+		emit dataUpdated( 0 );
+		} );
 	}
 
 AudioConvertToPVOCModel::~AudioConvertToPVOCModel() = default;
@@ -48,13 +55,7 @@ bool AudioConvertToPVOCModel::process()
 	converter->convertWithCanceller( in, windowSize, hopSize, fftSize, canceller );
 	emit computingStarted();
 
-	QObject::connect( converter.get(), &AudioToPVOCConverter::finished,
-			this, [this]( std::shared_ptr<NodeData> data )
-		{
-		out = data;
-		emit computingFinished();
-		emit dataUpdated( 0 );
-		} );
+
 
 	return true;
 	}

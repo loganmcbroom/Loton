@@ -32,7 +32,7 @@ bool PVOCResonateModel::process()
 	{
 	if( ! ins[0] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto res = tryLockingInput<Func2x1Data>( ins[1], resTimeModel->getSliderPosition() );
 	auto length = tryLockingInput<NumberData>( ins[2], in.getLength() + lengthModel->getSliderPosition() );
 

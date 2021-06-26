@@ -22,11 +22,8 @@ public:
 public slots:
 	void setAudio( std::shared_ptr<AudioData> );
 	void play();
-	//void pause() const;
 	void stop();
-
 	void handlePlayerStateChange( QAudio::State );
-	void handleNotify();
 
 signals:
 	void startedPlaying();

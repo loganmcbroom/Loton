@@ -70,8 +70,8 @@ void AudioPlayerModel::play()
 
 	output.reset( new QAudioOutput( format ) );
 	output->setNotifyInterval( 1000.0f / 60.0f );
-	QObject::connect( output.get(), &QAudioOutput::notify,
-		this, &AudioPlayerModel::handleNotify );
+//	QObject::connect( output.get(), &QAudioOutput::notify,
+//		this, &AudioPlayerModel::handleNotify );
 	QObject::connect( output.get(), &QAudioOutput::stateChanged,
 		this, &AudioPlayerModel::handlePlayerStateChange );
 	output->start( buffer );
@@ -103,10 +103,6 @@ void AudioPlayerModel::handlePlayerStateChange( QAudio::State newState )
 		default:
 			break;
 		}
-	}
-
-void AudioPlayerModel::handleNotify()
-	{
 	}
 
 

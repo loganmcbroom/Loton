@@ -6,6 +6,7 @@
 #include "NodeDataTypes/FunctionData.hpp"
 #include "NodeDataTypes/InterpolatorData.hpp"
 #include "FunctionModels/LuaHandlers/LuaPrismHandler.hpp"
+#include "Settings.hpp"
 
 
 PVOCPrismModel::PVOCPrismModel()
@@ -21,12 +22,12 @@ bool PVOCPrismModel::process()
 	{
 	if( ! ins[0] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 
 	const bool perNote_c = perNoteModel->getButtonPosition();
-	setFunctor( [in, lua = LuaPrismHandler( functionText->doc->toPlainText() ), perNote_c, c = canceller]()
+	setFunctor( [in, lua = LuaPrismHandler( functionText->doc->toPlainText() ), perNote_c, useGPU = Settings::useOpenCL(), c = canceller]()
 		{
-		return std::shared_ptr<NodeData>( new PVOCData( in.prism( lua, perNote_c, *c ) ) );
+		return std::shared_ptr<NodeData>( new PVOCData( in.prism( lua, perNote_c, useGPU, *c ) ) );
 		});
 
 	return true;

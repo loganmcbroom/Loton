@@ -18,7 +18,7 @@ bool PVOCAddOctavesModel::process()
 	{
 	if( ! ins[0] || !ins[1] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto series = std::dynamic_pointer_cast<Func2x1Data>( ins[1] );
 
 	setFunctor( [in, series, c = canceller]()

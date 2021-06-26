@@ -45,7 +45,7 @@ public:
 class PVOCToAudioConversion : public FFTConversion
 { Q_OBJECT
 public:
-	PVOCToAudioConversion( std::shared_ptr<PVOCData> flan,
+	PVOCToAudioConversion( std::shared_ptr<PVOCData> pvoc,
 		std::shared_ptr<std::atomic<bool>> );
 };
 

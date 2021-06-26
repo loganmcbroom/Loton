@@ -3,7 +3,6 @@ Ideas:
 	Player simple and advanced view for more advanced features
 		Player zooming and moving
 		Player moving line to Loton audio player view
-		Player PVOCPlayer make play button work?
 		Player time-scan feature in flanplayer, click to hear frame at that position
 	PVOC::freeze
 	Audio::lowPass
@@ -15,11 +14,11 @@ Ideas:
 	use Loton colors for audio/flan
 	combine LuaFunc2x1/2x2Models under base class
 	use fancy path finding in qmake
+	disable view move command?
 
 Todo:
-
 Task:
-	commit changes
+	push
 */
 
 

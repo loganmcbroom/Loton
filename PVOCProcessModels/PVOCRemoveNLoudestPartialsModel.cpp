@@ -28,7 +28,7 @@ bool PVOCRemoveNLoudestPartialsModel::process()
 	{
 	if( ! ins[0] ) return false;
 
-	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->flan;
+	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
 	auto partials = tryLockingInput<Func1x1Data>( ins[1], sliderModel->getSliderPosition() );
 
 	setFunctor( [in, partials, c = canceller]()
