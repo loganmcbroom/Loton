@@ -15,12 +15,21 @@ Ideas:
 	combine LuaFunc2x1/2x2Models under base class
 	use fancy path finding in qmake
 	disable view move command?
+	indicate point intep point positions with display in corner
+
+Completed:
+	Some tooltips
+	Port required indication
+	Node help window
+	Common node shortcuts
+	Misc. bug fixes
 
 Todo:
-Task:
-	push
-*/
+	cmake transition
 
+Task:
+
+*/
 
 
 #include <QApplication>

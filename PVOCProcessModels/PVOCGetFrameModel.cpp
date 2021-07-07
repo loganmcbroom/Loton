@@ -18,6 +18,7 @@ PVOCGetFrameModel::PVOCGetFrameModel()
 					this, &PVOCGetFrameModel::updateData );
 
 	auto sliderView = new NumberSliderView( frameTimeModel.get() );
+	setToolTipToPort( sliderView, 1 );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
 	}

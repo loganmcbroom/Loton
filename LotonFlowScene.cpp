@@ -10,12 +10,12 @@
 
 using namespace QtNodes;
 
-XFlowScene::XFlowScene( std::shared_ptr<QtNodes::DataModelRegistry> registry, QObject * parent )
+LotonFlowScene::LotonFlowScene( std::shared_ptr<QtNodes::DataModelRegistry> registry, QObject * parent )
 	: FlowScene( registry, parent )
 	{
 	}
 
-void XFlowScene::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
+void LotonFlowScene::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
 	{
 	if( event->mimeData()->hasUrls()
 	 || event->mimeData()->hasFormat( "application/x-qabstractitemmodeldatalist" ) )
@@ -24,7 +24,7 @@ void XFlowScene::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
 
 #include <QApplication>
 #include <QClipboard>
-void XFlowScene::dropEvent( QGraphicsSceneDragDropEvent * event )
+void LotonFlowScene::dropEvent( QGraphicsSceneDragDropEvent * event )
 	{
 	// Filepaths to PVOC/Audio data
 	if( event->mimeData()->hasUrls() )
@@ -50,7 +50,7 @@ void XFlowScene::dropEvent( QGraphicsSceneDragDropEvent * event )
 
 			std::unique_ptr<NodeDataModel> type;
 			QString suffix = QFileInfo( filepaths[i] ).suffix();
-			if( suffix == "flan" )
+			if( suffix == "pvoc" )
 				type = registry().create( "PVOC Source" );
 			else
 				type = registry().create( "Audio Source" );
@@ -61,7 +61,7 @@ void XFlowScene::dropEvent( QGraphicsSceneDragDropEvent * event )
 				undoStack->push( new NodeAddCommand( node ) );
 				node.nodeGraphicsObject().setPos( event->scenePos() + i * QPointF( 0, node.nodeGeometry().height() + 25 ) );
 				nodePlaced( node );
-				if( suffix == "flan" )
+				if( suffix == "pvoc" )
 					dynamic_cast<PVOCSourceDataModel *>( node.nodeDataModel() )->setFile( filepaths[i] );
 				else
 					dynamic_cast<AudioSourceDataModel *>( node.nodeDataModel() )->setFile( filepaths[i] );

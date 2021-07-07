@@ -19,17 +19,18 @@ AudioTextureModel::AudioTextureModel()
 	, scatterModel( new NumberSliderModel( 0, 0, NumberSlider::infinity ) )
 	, recursionModel( new OnOffButtonModel( false ) )
 	{
-	auto sliderSetup = [this]( NumberSliderModel * m )
+	auto sliderSetup = [this]( NumberSliderModel * m, int port )
 		{
 		QObject::connect( m, &NumberSliderModel::stateChanged, this, &AudioTextureModel::updateData );
 		auto v = new NumberSliderView( m );
 		mainLayout->addWidget( v );
 		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
 		};
 
-	sliderSetup( lengthModel.get() );
-	sliderSetup( eventsPerSecondModel.get() );
-	sliderSetup( scatterModel.get() );
+	sliderSetup( lengthModel.get(), 1 );
+	sliderSetup( eventsPerSecondModel.get(), 2 );
+	sliderSetup( scatterModel.get(), 3 );
 
 	QObject::connect( recursionModel.get(), &OnOffButtonModel::stateChanged, this, &AudioTextureModel::updateData );
 	}

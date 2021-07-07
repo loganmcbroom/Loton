@@ -9,12 +9,14 @@
 
 #include "Widgets/SampleExplorer.hpp"
 #include "LotonFlowScene.hpp"
+#include "nodes/FlowView"
 #include "NodeControlPanel.hpp"
 #include "Settings.hpp"
 #include "LotonController.hpp"
 #include "LotonNodeModel.hpp"
 #include <nodes/Node>
 #include "Widgets/ProcessExplorer.hpp"
+#include "Widgets/LotonHelpWidget.hpp"
 
 
 MainWindow * MainWindow::instance = nullptr;
@@ -24,7 +26,9 @@ LotonNodeModel * MainWindow::activeNode()
 	}
 void MainWindow::setActiveNode( LotonNodeModel * newPanel )
 	{
-	getInstance()->centralWidgetManager->centralWidget->controlPanel->setActiveNode( newPanel );
+	auto cw = getInstance()->centralWidgetManager->centralWidget;
+	cw->controlPanel->setActiveNode( newPanel );
+	cw->helpWidget->setActiveNode( newPanel );
 	}
 
 MainWindow::MainWindow()
@@ -215,6 +219,39 @@ void MainWindow::updateTitle()
 		}
 	}
 
+void MainWindow::createMixNode()
+	{
+	createNode( "Audio Mix" );
+	}
+
+void MainWindow::createJoinNode()
+	{
+	createNode( "Audio Join" );
+	}
+
+void MainWindow::createCutNode()
+	{
+	createNode( "Audio Cut" );
+	}
+
+void MainWindow::createSetVolumeNode()
+	{
+	createNode( "Audio Set Volume" );
+	}
+
+void MainWindow::createPanNode()
+	{
+	createNode( "Audio Pan" );
+	}
+
+void MainWindow::createNode( QString nodeName )
+	{
+	auto scene = centralWidgetManager->centralWidget->flowScene;
+	auto view = centralWidgetManager->centralWidget->flowView;
+	const QPointF pos = view->mapToScene( QPoint( view->width() / 2, view->height() / 2 ) );
+	scene->createNodeFromName( nodeName, pos );
+	}
+
 void MainWindow::closeEvent( QCloseEvent * event )
     {
 	if( ! LotonController::manager().undoStack->isClean() )
@@ -313,6 +350,33 @@ void MainWindow::createActions()
 	projectFolderSelectAct->setStatusTip( "Select the projects folder" );
 	connect( projectFolderSelectAct, &QAction::triggered,
 			this, &MainWindow::projectFolderSelect );
+
+
+	// Node creation shortcuts
+	nodeMixAct = new QAction( "&Mix", this );
+	nodeMixAct->setShortcuts( { Qt::CTRL + Qt::SHIFT + Qt::Key_M } );
+	nodeMixAct->setStatusTip( "Create mix node" );
+	connect( nodeMixAct, &QAction::triggered, this, &MainWindow::createMixNode );
+
+	nodeJoinAct = new QAction( "&Join", this );
+	nodeJoinAct->setShortcuts( { Qt::CTRL + Qt::SHIFT + Qt::Key_J } );
+	nodeJoinAct->setStatusTip( "Create join node" );
+	connect( nodeJoinAct, &QAction::triggered, this, &MainWindow::createJoinNode );
+
+	nodeCutAct = new QAction( "&Cut", this );
+	nodeCutAct->setShortcuts( { Qt::CTRL + Qt::SHIFT + Qt::Key_C } );
+	nodeCutAct->setStatusTip( "Create cut node" );
+	connect( nodeCutAct, &QAction::triggered, this, &MainWindow::createCutNode );
+
+	nodeSetVolumeAct = new QAction( "&Set Volume", this );
+	nodeSetVolumeAct->setShortcuts( { Qt::CTRL + Qt::SHIFT + Qt::Key_S } );
+	nodeSetVolumeAct->setStatusTip( "Create set volume node" );
+	connect( nodeSetVolumeAct, &QAction::triggered, this, &MainWindow::createSetVolumeNode );
+
+	nodePanAct = new QAction( "&Pan", this );
+	nodePanAct->setShortcuts( { Qt::CTRL + Qt::SHIFT + Qt::Key_P } );
+	nodePanAct->setStatusTip( "Create pan node" );
+	connect( nodePanAct, &QAction::triggered, this, &MainWindow::createPanNode );
 	}
 
 
@@ -336,6 +400,13 @@ void MainWindow::createMenus()
 	editMenu->addAction( resetZoomAct );
 	editMenu->addAction( findNodeAct );
 //    editMenu->addSeparator();
+
+	QMenu * nodeMenu = menuBar()->addMenu( "&Nodes" );
+	nodeMenu->addAction( nodeMixAct );
+	nodeMenu->addAction( nodeJoinAct );
+	nodeMenu->addAction( nodeCutAct );
+	nodeMenu->addAction( nodeSetVolumeAct );
+	nodeMenu->addAction( nodePanAct );
     }
 
 #include <nodes/NodeStyle>

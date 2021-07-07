@@ -18,7 +18,7 @@ public:
 	LuaPrismHandler & operator=( const LuaPrismHandler & other ) = delete;
 	LuaPrismHandler & operator=( LuaPrismHandler && other ) = delete;
 
-	flan::PVOCBuffer::MF operator()( float time, int harmonic, float baseFreq, const std::vector<float> & mags );
+	flan::PVOCBuffer::MF operator()( int note, float time, int harmonic, float baseFreq, const std::vector<float> & mags );
 
 protected:
 	QString funcString;

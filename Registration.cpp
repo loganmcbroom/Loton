@@ -5,6 +5,7 @@
 #include <nodes/DataModelRegistry>
 
 //Function Related Nodes
+#include "FunctionModels/AudioConvertToFunctionModel.hpp"
 #include "FunctionModels/DistributionExponentialModel.hpp"
 #include "FunctionModels/DistributionNormalModel.hpp"
 #include "FunctionModels/DistributionUniformRealModel.hpp"
@@ -21,7 +22,6 @@
 #include "FunctionModels/NumberModel.hpp"
 
 //Audio Transforms
-#include "AudioProcessModels/AudioConvertToFunctionModel.hpp"
 #include "AudioProcessModels/AudioConvertToLeftRightModel.hpp"
 #include "AudioProcessModels/AudioConvertToMidSideModel.hpp"
 #include "AudioProcessModels/AudioConvertToMonoModel.hpp"
@@ -37,6 +37,7 @@
 #include "AudioProcessModels/AudioIterateModel.hpp"
 #include "AudioProcessModels/AudioJoinModel.hpp"
 #include "AudioProcessModels/AudioLengthModel.hpp"
+#include "AudioProcessModels/AudioMaxModel.hpp"
 #include "AudioProcessModels/AudioMixModel.hpp"
 #include "AudioProcessModels/AudioModifyVolumeModel.hpp"
 #include "AudioProcessModels/AudioPanModel.hpp"
@@ -92,7 +93,6 @@ std::shared_ptr<DataModelRegistry> registerDataModels()
 
 
 	QString audioProcCategory = "Audio Transforms";
-	ret->registerModel<AudioConvertToFunctionModel>		( audioProcCategory );
 	ret->registerModel<AudioConvertToLeftRightModel>	( audioProcCategory );
 	ret->registerModel<AudioConvertToMidSideModel>		( audioProcCategory );
 	ret->registerModel<AudioConvertToMonoModel>			( audioProcCategory );
@@ -108,6 +108,7 @@ std::shared_ptr<DataModelRegistry> registerDataModels()
 	ret->registerModel<AudioIterateModel>				( audioProcCategory );
 	ret->registerModel<AudioJoinModel>					( audioProcCategory );
 	ret->registerModel<AudioLengthModel>				( audioProcCategory );
+	ret->registerModel<AudioMaxModel>					( audioProcCategory );
 	ret->registerModel<AudioMixModel>					( audioProcCategory );
 	ret->registerModel<AudioModifyVolumeModel>			( audioProcCategory );
 	ret->registerModel<AudioPanModel>					( audioProcCategory );
@@ -123,6 +124,7 @@ std::shared_ptr<DataModelRegistry> registerDataModels()
 	ret->registerModel<AudioWidenModel>					( audioProcCategory );
 
 	QString functionCategory = "Functional Nodes";
+	ret->registerModel<AudioConvertToFunctionModel>		( functionCategory );
 	ret->registerModel<Func1x1ExponentialModel>			( functionCategory );
 	ret->registerModel<DistributionExponentialModel>	( functionCategory );
 	ret->registerModel<DistributionNormalModel>			( functionCategory );

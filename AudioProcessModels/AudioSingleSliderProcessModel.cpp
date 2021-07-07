@@ -20,6 +20,7 @@ AudioSingleSliderProcessModel::AudioSingleSliderProcessModel( double sliderLow, 
 	auto sliderView = new NumberSliderView( sliderModel.get() );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
+	sliderView->setToolTip( "Factor" );
 	}
 
 AudioSingleSliderProcessModel::~AudioSingleSliderProcessModel() = default;

@@ -1,25 +1,25 @@
 #pragma once
 
-#include "AudioProcessModel.hpp"
-
-/*
- * Base class for audio transforms taking no parameters
- */
+#include "AudioInfoProcessModel.hpp"
 
 namespace flan { class Audio; };
 class AudioData;
 
-struct AudioSimpleTransformModel : public AudioProcessModel
+struct AudioMaxModel : public AudioInfoProcessModel
 	{
-	AudioSimpleTransformModel();
-	virtual ~AudioSimpleTransformModel() override {}
-
-	virtual std::function< std::shared_ptr<AudioData> () > getMethod( flan::Audio ) const = 0;
+	AudioMaxModel();
 
 	bool process() override final;
+
+	QString caption() const override;
+	QString name() const override;
 	QString portCaption(PortType, PortIndex) const override;
 	unsigned int nPorts( PortType type ) const override;
 	NodeDataType dataType( PortType type, PortIndex index ) const override;
 	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(This returns the size of the largest sample in the input.
+		)";
+		}
 	};
-

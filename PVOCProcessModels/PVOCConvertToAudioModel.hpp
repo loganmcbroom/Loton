@@ -19,9 +19,14 @@ struct PVOCConvertToAudioModel : public AudioProcessModel
 	NodeDataType dataType( PortType type, PortIndex index ) const override final;
 	ControllerPairs makeInputControllers() override final;
 	void inputConnectionDeleted( PortIndex ) override;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(Transforms the input PVOC to an Audio.
+Note, this has less options than the forward transform, as those parameters are already decided here.
+		)";
+		}
 
-	//std::unique_ptr<StringDisplayModel> windowSizeModel;
-	//std::unique_ptr<StringDisplayModel> overlapsModel;
 	std::unique_ptr<PVOCToAudioConverter> converter;
 	};
 

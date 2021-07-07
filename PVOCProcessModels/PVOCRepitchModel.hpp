@@ -18,6 +18,15 @@ public:
 	unsigned int nPorts( PortType type ) const override;
 	NodeDataType dataType( PortType type, PortIndex index ) const override;
 	ControllerPairs makeInputControllers() override;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(This scales the input frequencies at each input point.
+
+Factor - 2->1:
+	Takes time/frequency pairs and returns a frequency multiplier
+		)";
+		}
 
 	QJsonObject save() const override;
 	void restore( QJsonObject const & p ) override;

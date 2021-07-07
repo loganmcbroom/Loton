@@ -18,6 +18,17 @@ struct PVOCRetainNLoudestPartialsModel : public PVOCProcessModel
 	ControllerPairs makeInputControllers() override final;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(At any given time, numPartials should return a number of bins, N, to retain.
+The N loudest bins are copied to the output.
+All other output bins are 0 filled.
+
+Num Partials - 1->1:
+	The number of partials to retain as a function of time.
+		)";
+		}
 
 	std::unique_ptr<NumberSliderModel> sliderModel;
 	};

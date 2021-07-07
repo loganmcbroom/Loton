@@ -15,6 +15,14 @@ public:
 	QString caption() const override { return "Lua 2->1"; }
 	QString name() const override { return "Lua 2->1"; }
 	std::shared_ptr<Func2x1Data> function() override;
+	QString description() const override
+		{
+		return R"(This returns a user-created Lua function, defined in the node view.
+
+Input - Number:
+	If provided, the node will output a constant function equal to itself evaluated at (Input, 0).
+		)";
+		}
 private:
 
 	QWidget * makeHeaderWidget() override;

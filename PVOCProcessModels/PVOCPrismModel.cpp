@@ -59,14 +59,15 @@ ControllerPairs PVOCPrismModel::makeInputControllers()
 	auto textView = new TextEditorView( functionText.get() );
 	textView->setFixedHeight( 300 );
 	textView->setPlaceholderText( R"(This function has access to:
+			The note index n
 			The time t
-			The harmonic index, h (starting at one)
 			The fundamental frequency, f
-			The number of harmonics, n
-			All harmonic magnitudes in a vector, ms
+			The harmonic index, h (starting at one)
+			The number of harmonics, hn
+			All harmonic magnitudes in a vector, hs
 
 The function should return the magnitude and frequency that the current harmonic should be written to. For example, the identity function would be:
-			return ms[h], f * h
+			return hs[h], f * h
 		)" );
 	return {
 		{ QString(), textView },

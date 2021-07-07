@@ -98,7 +98,7 @@ SettingsMenu::SettingsMenu( QWidget * parent )
 
 	NumberSlider * timeoutSlider = new NumberSlider( Settings::processTimeout(), 1, NumberSlider::infinity );
 	timeoutSlider->setFilter( []( float x ){ return std::round( x ); } );
-	QObject::connect( PVOCFFTSlider, &NumberSlider::stateChanged, this, [timeoutSlider](){ Settings::setProcessTimeout( timeoutSlider->getSliderPosition() ); } );
+	QObject::connect( timeoutSlider, &NumberSlider::stateChanged, this, [timeoutSlider](){ Settings::setProcessTimeout( timeoutSlider->getSliderPosition() ); } );
 	addSlider( 1, "Process Timeout (ms)", timeoutSlider );
 
 

@@ -21,6 +21,7 @@ PVOCRepitchModel::PVOCRepitchModel()
 					this, &PVOCRepitchModel::updateData );
 
 	auto sliderView = new NumberSliderView( factorModel.get() );
+	setToolTipToPort( sliderView, 1 );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
 	}

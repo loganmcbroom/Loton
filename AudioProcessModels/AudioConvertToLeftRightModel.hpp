@@ -12,5 +12,9 @@ struct AudioConvertToLeftRightModel : public AudioSimpleTransformModel
 
 	QString caption() const override;
 	QString name() const override;
+	QString description() const override
+		{
+		return R"(Converts back to Left/Right from Mid/Side. See "Audio Convert To Mid/Side".)";
+		}
 	};
 

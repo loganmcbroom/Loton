@@ -15,17 +15,17 @@ AudioCutModel::AudioCutModel()
 	, leftSliderModel( new NumberSliderModel( 0, 0, NumberSlider::infinity ) )
 	, rightSliderModel( new NumberSliderModel( 0, 0, NumberSlider::infinity ) )
 	{
-	auto sliderSetup = [this]( NumberSliderModel * sliderModel )
+	auto sliderSetup = [this]( NumberSliderModel * m, int port )
 		{
-		QObject::connect( sliderModel, &NumberSliderModel::stateChanged,
-						this, &AudioCutModel::updateData );
-		auto sliderView = new NumberSliderView( sliderModel );
-		mainLayout->addWidget( sliderView );
-		sliderView->setMinimumSize( 64, 20 );
+		QObject::connect( m, &NumberSliderModel::stateChanged, this, &AudioCutModel::updateData );
+		auto v = new NumberSliderView( m );
+		mainLayout->addWidget( v );
+		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
 		};
 
-	sliderSetup( leftSliderModel.get() );
-	sliderSetup( rightSliderModel.get() );
+	sliderSetup( leftSliderModel.get(), 1 );
+	sliderSetup( rightSliderModel.get(), 2 );
 	}
 
 AudioCutModel::~AudioCutModel() = default;
@@ -34,18 +34,13 @@ bool AudioCutModel::process()
 	{
 	if( ! ins[0] ) return false;
 
-	auto in = std::dynamic_pointer_cast<AudioData>( ins[0] )->audio;
-	float leftBound = ins[1]?
-		std::dynamic_pointer_cast<NumberData>( ins[1] )->f :
-		float( leftSliderModel->getSliderPosition() );
-
-	float rightBound = ins[2]?
-		std::dynamic_pointer_cast<NumberData>( ins[2] )->f :
-		float( rightSliderModel->getSliderPosition() );
+	auto in = std::dynamic_pointer_cast<AudioData>( ins[0] );
+	auto leftBound = tryLockingInput<NumberData>( ins[1], leftSliderModel->getSliderPosition() );
+	auto rightBound = tryLockingInput<NumberData>( ins[2], rightSliderModel->getSliderPosition() );
 
 	setFunctor( [in, leftBound, rightBound, c = canceller]()
 		{
-		return std::shared_ptr<NodeData>( new AudioData( in.cut( leftBound, rightBound, *c ) ) );
+		return std::make_shared<AudioData>( in->audio.cut( leftBound->f, rightBound->f, *c ) );
 		});
 
 	return true;

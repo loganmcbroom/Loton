@@ -23,6 +23,8 @@ PVOCGenerateModel::PVOCGenerateModel()
 	mainLayout->addWidget( freqView );
 	lengthView->setMinimumSize( 64, 20 );
 	freqView->setMinimumSize( 64, 20 );
+	setToolTipToPort( lengthView, 0 );
+	setToolTipToPort( freqView, 1 );
 	}
 
 bool PVOCGenerateModel::process()

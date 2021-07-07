@@ -20,20 +20,21 @@ AudioGrainSelectModel::AudioGrainSelectModel()
 	, grainLengthModel( new NumberSliderModel( .1f, 0, NumberSlider::infinity ) )
 	, fadeLengthModel( new NumberSliderModel( .05f, 0, NumberSlider::infinity ) )
 	{
-	auto sliderSetup = [this]( NumberSliderModel * m )
+	auto sliderSetup = [this]( NumberSliderModel * m, int port )
 		{
 		QObject::connect( m, &NumberSliderModel::stateChanged, this, &AudioGrainSelectModel::updateData );
 		auto v = new NumberSliderView( m );
 		mainLayout->addWidget( v );
 		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
 		};
 
-	sliderSetup( lengthModel.get() );
-	sliderSetup( grainsPerSecondModel.get() );
-	sliderSetup( scatterModel.get() );
-	sliderSetup( selectionModel.get() );
-	sliderSetup( grainLengthModel.get() );
-	sliderSetup( fadeLengthModel.get() );
+	sliderSetup( lengthModel.get(), 1 );
+	sliderSetup( grainsPerSecondModel.get(), 2 );
+	sliderSetup( scatterModel.get(), 3 );
+	sliderSetup( selectionModel.get(), 4 );
+	sliderSetup( grainLengthModel.get(), 5 );
+	sliderSetup( fadeLengthModel.get(), 6 );
 	}
 
 AudioGrainSelectModel::~AudioGrainSelectModel() = default;

@@ -43,6 +43,8 @@ public:
 	virtual void inputsUpdated( std::shared_ptr<NodeData>, PortIndex ) {}
 	virtual ControllerPairs makeInputControllers() { return {}; }
 	virtual QWidget * makeHeaderWidget() { return nullptr; }
+	virtual std::vector<PortIndex> portsRequired() const = 0;
+	virtual QString description() const { return ""; }
 
 protected:
 	void setInData( std::shared_ptr<NodeData>, PortIndex ) override final;
@@ -52,6 +54,8 @@ protected:
 	void clicked() override final;
 	std::shared_ptr<LotonNodeData> makeWipe() const;
 	bool hasWipedInput() const;
+	void setToolTipToPort( QWidget *, PortIndex );
+	bool portRequired( PortIndex ) const override;
 
 	//Utility used in derived classes
 	template<typename T, typename S>

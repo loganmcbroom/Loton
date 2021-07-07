@@ -17,5 +17,13 @@ public:
 	QString graphTitle() const override { return "P = λe^(-λt) + µ"; }
 	std::shared_ptr<Func1x1Data> sliderFunction( const std::vector<float> & sliderValues ) override;
 	void generateGraphFunction( const std::vector<float> & vs ) override;
+	QString description() const override
+		{
+		return R"(Distribution with a PDF of λe^(-λt) + µ.
+
+Seed - Number:
+	If provided, the distribution will use this as a fixed seed.
+		)";
+		}
 };
 

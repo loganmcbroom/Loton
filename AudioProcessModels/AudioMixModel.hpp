@@ -20,6 +20,12 @@ struct AudioMixModel : public AudioProcessModel
 	ControllerPairs makeInputControllers() override;
 	QJsonObject save() const override;
 	void restore( QJsonObject const & p ) override;
+	std::vector<PortIndex> portsRequired() const override { return {}; }
+	QString description() const override
+		{
+		return R"(This mixes all the inputs.
+		)";
+		}
 
 	virtual void inputConnectionCreated( PortIndex ) override;
 	virtual void inputConnectionDeleted( PortIndex ) override;

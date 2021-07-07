@@ -59,7 +59,7 @@ void LuaPrismHandler::initLua()
 	}
 
 static const QString userFunctionString = R"(
-	function USER_LUA_FUNCTION( t, h, f, n, ms )
+	function USER_LUA_FUNCTION( n, t, f, h, hn, hs )
 
 	)"; // "end" will be added later
 
@@ -91,7 +91,7 @@ LuaPrismHandler::LuaPrismHandler( LuaPrismHandler && other )
 	other.funcString = QString();
 	}
 
-flan::PVOCBuffer::MF LuaPrismHandler::operator()( float time, int harmonic, float baseFreq, const std::vector<float> & mags )
+flan::PVOCBuffer::MF LuaPrismHandler::operator()( int note, float time, int harmonic, float baseFreq, const std::vector<float> & mags )
 	{
 	Q_ASSERT( lua_gettop( L ) == 0 );
 
@@ -110,9 +110,10 @@ flan::PVOCBuffer::MF LuaPrismHandler::operator()( float time, int harmonic, floa
 	lua_getglobal( L, "USER_LUA_FUNCTION" );
 
 	// Push inputs
+	lua_pushnumber( L, note + 1 );
 	lua_pushnumber( L, time );
-	lua_pushnumber( L, harmonic+1 );
 	lua_pushnumber( L, baseFreq );
+	lua_pushnumber( L, harmonic+1 );
 	lua_pushnumber( L, mags.size() );
 	const std::vector<float>** const pArray = (const std::vector<float>**) lua_newuserdata( L, sizeof( const std::vector<float>** ) );
 	*pArray = &mags;
@@ -120,7 +121,7 @@ flan::PVOCBuffer::MF LuaPrismHandler::operator()( float time, int harmonic, floa
 	lua_setmetatable( L, -2 );
 
 	// Call function
-	if( lua_pcall( L, 5, 2, 0 ) != 0 )
+	if( lua_pcall( L, 6, 2, 0 ) != 0 )
 		return err( lua_tostring( L, -1 ) );
 
 	// Get outputs

@@ -16,4 +16,10 @@ struct AudioLengthModel : public AudioInfoProcessModel
 	QString portCaption(PortType, PortIndex) const override;
 	unsigned int nPorts( PortType type ) const override;
 	NodeDataType dataType( PortType type, PortIndex index ) const override;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(This returns the length of the input in seconds.
+		)";
+		}
 	};

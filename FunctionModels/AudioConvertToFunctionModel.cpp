@@ -7,16 +7,31 @@
 #include "NodeDataTypes/FunctionData.hpp"
 #include "NodeDataTypes/NumberData.hpp"
 #include "Widgets/NumberSlider.hpp"
+#include "Widgets/FunctionGeneratorPlot.hpp"
 
 using namespace flan;
 
 AudioConvertToFunctionModel::AudioConvertToFunctionModel()
-	: AudioProcessModel()
-	, granularityModel( new NumberSliderModel( 4096, 1, NumberSlider::infinity ) )
+	: FlanProcessModel()
+	, granularityModel( new NumberSliderModel( 5, 1, NumberSlider::infinity ) )
+	, plotModel( new FunctionGeneratorPlotModel( QString() ) )
 	{
 	granularityModel->setFilter( []( float x ){ return std::round( x ); } );
-	QObject::connect( granularityModel.get(), &NumberSliderModel::stateChanged,
-			this, &AudioConvertToFunctionModel::updateData );
+	QObject::connect( granularityModel.get(), &NumberSliderModel::stateChanged, this, &AudioConvertToFunctionModel::updateData );
+	QObject::connect( this, &AudioConvertToFunctionModel::dataUpdated, plotModel.get(), [this]( int )
+		{
+		plotModel->setOut( std::static_pointer_cast<Func1x1Data>( out ) );
+		} );
+
+	mainLayout->setContentsMargins( 0,3,0,0 );
+	mainLayout->setSpacing( 0 );
+
+	auto plotView = new FunctionGeneratorPlotView( plotModel.get(), 2 );
+	plotView->setFixedSize( 120, 120 );
+	plotView->setStyleSheet( "QwtPlot { border: 1px solid white; }" );
+	plotView->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
+
+	mainLayout->addWidget( plotView );
 	}
 
 AudioConvertToFunctionModel::~AudioConvertToFunctionModel() = default;
@@ -33,7 +48,7 @@ bool AudioConvertToFunctionModel::process()
 
 	setFunctor( [in, granularity, cancel = canceller]()
 		{
-		return std::make_shared<Func1x1Data>( in.convertToFunction( granularity, *cancel ) );
+		return std::make_shared<Func1x1Data>( in.convertToFunction( granularity / 1000, *cancel ) );
 		} );
 
 	return true;
@@ -49,7 +64,7 @@ QString AudioConvertToFunctionModel::portCaption( PortType type, PortIndex index
 	else if( type == PortType::Out )
 		switch( index )
 			{
-			case 0: return "Func1x1";
+			case 0: return "1->1";
 			}
 
 	return "";
@@ -78,6 +93,13 @@ NodeDataType AudioConvertToFunctionModel::dataType( PortType type, PortIndex ind
 			default: return {"",""};
 			}
 	else return {"",""};
+	}
+
+QWidget * AudioConvertToFunctionModel::makeHeaderWidget()
+	{
+	auto plotView = new FunctionGeneratorPlotViewAdv( plotModel.get(), 2 );
+	plotView->setFixedHeight( 300 );
+	return plotView;
 	}
 
 ControllerPairs AudioConvertToFunctionModel::makeInputControllers()

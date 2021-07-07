@@ -22,6 +22,7 @@ AudioStreamSelectModel::AudioStreamSelectModel()
 	auto v = new NumberSliderView( selectionModel.get() );
 	mainLayout->addWidget( v );
 	v->setMinimumSize( 64, 20 );
+	setToolTipToPort( v, 1 );
 	QObject::connect( selectionModel.get(), &NumberSliderModel::stateChanged, this, &AudioStreamSelectModel::updateData );
 	}
 
@@ -37,7 +38,7 @@ bool AudioStreamSelectModel::process()
 
 	// Lock variable number of inputs
 	std::vector<flan::Audio> locks;
-	for( int i = 1; i < ins.size() - 2; ++i )
+	for( int i = 1; i < ins.size() - 1; ++i )
 		if( ins[i] )
 			//Audio copy constructor doesn't perform deep copy, so this is fast
 			locks.push_back( std::dynamic_pointer_cast<AudioData>( ins[i] )->audio );

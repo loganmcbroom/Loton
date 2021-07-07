@@ -19,6 +19,18 @@ struct AudioCutModel : public AudioProcessModel
 	ControllerPairs makeInputControllers() override final;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(This returns a peice of the original Audio that lied between Start and End.
+
+Start - Number:
+	The start time.
+
+End - Number:
+	The end time.
+		)";
+		}
 
 	std::unique_ptr<NumberSliderModel> leftSliderModel;
 	std::unique_ptr<NumberSliderModel> rightSliderModel;

@@ -12,4 +12,9 @@ struct AudioConvertToStereoModel : public AudioSimpleTransformModel
 
 	QString caption() const override;
 	QString name() const override;
+	QString description() const override
+		{
+		return R"(This converts the input to a two channel Audio. The conversion is channel-count dependant. The currently accepted channel counts are: 1 and 2.
+		)";
+		}
 	};

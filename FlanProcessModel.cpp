@@ -30,7 +30,7 @@ FlanProcessModel::FlanProcessModel()
 	, canceller()
 	, mainLayout( nullptr )
 	, indicator( new LED )
-    {
+	{
 	mainLayout = new QVBoxLayout;
 	mainLayout->setMargin( 0 );
 	mainWidget->setLayout( mainLayout );
@@ -64,11 +64,13 @@ void FlanProcessModel::setFunctor( std::function< std::shared_ptr<NodeData> () >
 	outWatcher.reset( new QFutureWatcher<std::shared_ptr<NodeData>>() );
 	outFuture.reset( new QFuture<std::shared_ptr<NodeData>>( QtConcurrent::run( functor ) ) );
 
-	QObject::connect( outWatcher.get(), &QFutureWatcher<std::shared_ptr<NodeData>>::finished, this, [this]()
+	QObject::connect( outWatcher.get(), &QFutureWatcher<std::shared_ptr<NodeData>>::finished, this, [this, c = canceller]()
 		{
 		out = outFuture->result();
 		emit computingFinished();
 		emit dataUpdated( 0 );
+		if( c )
+			*c = true;
 		} );
 
 	outWatcher->setFuture( *outFuture );
@@ -86,23 +88,22 @@ void FlanProcessModel::updateData()
 	timeoutTimer->setInterval( Settings::processTimeout() );
 	QObject::connect( timeoutTimer.get(), &QTimer::timeout, [this, c = canceller]()
 		{
-		if( !c )
+		if( !*c ) // If the process is still running, cancel it and set validation to error
 			{
 			setValidationState( QtNodes::NodeValidationState::Error, "Process timed out." );
+			*c = true;
 			}
-		*c = true;
 		} );
 
 	// Don't process wipe commands
 	if( hasWipedInput() ) return;
-
-	timeoutTimer->start();
 
 	bool accepted = process();
 
 	if( accepted )
 		{
 		setValidationState( QtNodes::NodeValidationState::Valid, "" );
+		timeoutTimer->start();
 		emit computingStarted();
 		}
 	else

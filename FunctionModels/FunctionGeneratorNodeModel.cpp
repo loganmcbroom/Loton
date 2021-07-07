@@ -36,6 +36,7 @@ void FunctionGeneratorNodeModel::initialize()
 		sliders[i] = new NumberSlider( defaultSliderValue( i ), sliderLowerBound( i ), sliderUpperBound( i ) );
 		sliderLayout->addWidget( sliders[i] );
 		sliders[i]->setFixedSize( 64, 20 );
+		sliders[i]->setToolTip( sliderCaption( i ) );
 
 		QObject::connect( sliders[i], &NumberSliderModel::stateChangedDynamic,
 					this, &FunctionGeneratorNodeModel::updateOutput );

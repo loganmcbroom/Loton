@@ -20,6 +20,16 @@ struct AudioStreamSelectModel : public AudioProcessModel
 	ControllerPairs makeInputControllers() override;
 	QJsonObject save() const override;
 	void restore( QJsonObject const & p ) override;
+	std::vector<PortIndex> portsRequired() const override { return {}; }
+	QString description() const override
+		{
+		return R"(At each point in time, selection decides which of the input Audio streams is playing.
+Non-integer selections will mix appropriately scaled copies of the surrounding integer inputs.
+
+Selection - 1->1:
+	The audio stream selection. Zero-indexed.
+		)";
+		}
 
 	virtual void inputConnectionCreated( PortIndex ) override;
 	virtual void inputConnectionDeleted( PortIndex ) override;

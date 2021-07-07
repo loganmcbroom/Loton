@@ -79,6 +79,17 @@ bool LotonNodeModel::hasWipedInput() const
 	return std::any_of( ins.begin(), ins.end(), []( std::shared_ptr<LotonNodeData> a ){ return a && a->wipe(); } );
 	}
 
+void LotonNodeModel::setToolTipToPort( QWidget * w, PortIndex i )
+	{
+	w->setToolTip( portCaption( PortType::In, i ) );
+	}
+
+bool LotonNodeModel::portRequired( PortIndex i ) const
+	{
+	const std::vector<PortIndex> ports = portsRequired();
+	return std::find( ports.begin(), ports.end(), i ) != ports.end();
+	}
+
 void LotonNodeModel::setValidationState( QtNodes::NodeValidationState state, QString msg )
 	{
 	modelValidationState = state;

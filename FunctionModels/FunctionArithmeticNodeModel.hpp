@@ -34,6 +34,7 @@ private:
 	unsigned int nPorts( PortType ) const override;
 	QJsonObject save() const override;
 	void restore( QJsonObject const & ) override;
+	std::vector<PortIndex> portsRequired() const override { return { 0, 1 }; }
 
 	void updateOutput();
 	void updateDisplay();
@@ -54,6 +55,11 @@ struct FunctionAdditionNodeModel : public FunctionArithmeticNodeModel
 	QString caption() const override { return "Add"; }
 	QString name() const override { return "Arithmetic - Add"; }
 	std::shared_ptr<NodeData> operation() override;
+	QString description() const override
+		{
+		return R"(This returns the sum of the inputs.
+		)";
+		}
 };
 
 struct FunctionSubtractionNodeModel : public FunctionArithmeticNodeModel
@@ -62,6 +68,11 @@ struct FunctionSubtractionNodeModel : public FunctionArithmeticNodeModel
 	QString caption() const override { return "Subtract"; }
 	QString name() const override { return "Arithmetic - Subtract"; }
 	std::shared_ptr<NodeData> operation() override;
+	QString description() const override
+		{
+		return R"(This returns the difference of the inputs.
+		)";
+		}
 };
 
 struct FunctionMultiplicationNodeModel : public FunctionArithmeticNodeModel
@@ -70,6 +81,11 @@ struct FunctionMultiplicationNodeModel : public FunctionArithmeticNodeModel
 	QString caption() const override { return "Multiply"; }
 	QString name() const override { return "Arithmetic - Multiply"; }
 	std::shared_ptr<NodeData> operation() override;
+	QString description() const override
+		{
+		return R"(This returns the product of the inputs.
+		)";
+		}
 };
 
 struct FunctionDivisionNodeModel : public FunctionArithmeticNodeModel
@@ -78,6 +94,11 @@ struct FunctionDivisionNodeModel : public FunctionArithmeticNodeModel
 	QString caption() const override { return "Divide"; }
 	QString name() const override { return "Arithmetic - Divide"; }
 	std::shared_ptr<NodeData> operation() override;
+	QString description() const override
+		{
+		return R"(This returns the quotient of the inputs.
+		)";
+		}
 };
 
 

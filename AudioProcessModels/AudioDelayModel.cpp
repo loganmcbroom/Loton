@@ -18,18 +18,18 @@ AudioDelayModel::AudioDelayModel()
 	, decayAmtModel	( new NumberSliderModel( .5, 0, NumberSlider::infinity ) )
 	, recursionModel( new OnOffButtonModel( false ) )
 	{
-	auto sliderSetup = [this]( NumberSliderModel * m )
+	auto sliderSetup = [this]( NumberSliderModel * m, int port )
 		{
-		QObject::connect( m, &NumberSliderModel::stateChanged,
-			this, &AudioDelayModel::updateData );
+		QObject::connect( m, &NumberSliderModel::stateChanged, this, &AudioDelayModel::updateData );
 		auto v = new NumberSliderView( m );
 		mainLayout->addWidget( v );
 		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
 		};
 
-	sliderSetup( lengthModel.get() );
-	sliderSetup( delayModel.get() );
-	sliderSetup( decayAmtModel.get() );
+	sliderSetup( lengthModel.get(), 1 );
+	sliderSetup( delayModel.get(), 2 );
+	sliderSetup( decayAmtModel.get(), 3 );
 
 	QObject::connect( recursionModel.get(), &OnOffButtonModel::stateChanged, this, &AudioDelayModel::updateData );
 	}

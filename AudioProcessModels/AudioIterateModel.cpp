@@ -23,6 +23,7 @@ AudioIterateModel::AudioIterateModel()
 	auto sliderView = new NumberSliderView( numIterationsModel.get() );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
+	setToolTipToPort( sliderView, 1 );
 
 	numIterationsModel->setFilter( []( float x ){ return std::round( x ); } );
 	}

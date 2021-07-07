@@ -13,6 +13,7 @@
 #include "Widgets/SampleExplorer.hpp"
 #include "Widgets/ProcessExplorer.hpp"
 #include "Widgets/SettingsMenu.hpp"
+#include "Widgets/LotonHelpWidget.hpp"
 
 using namespace QtNodes;
 
@@ -42,6 +43,11 @@ void CentralWidgetManager::showSettingsMenu()
 	setCurrentWidget( settingsMenu );
 	}
 
+void CentralWidgetManager::toggleHelp()
+	{
+	centralWidget->helpWidget->setHidden( ! centralWidget->helpWidget->isHidden() );
+	}
+
 //==============================================================================
 // CentralWidget
 
@@ -58,8 +64,7 @@ CentralWidget::CentralWidget( QWidget * parent )
 	mainSplitter->setHandleWidth( 4 );
 	mainSplitter->setChildrenCollapsible( false );
 
-	flowScene = new XFlowScene( registerDataModels(), mainSplitter );
-	flowView = new FlowView( flowScene );
+	flowScene = new LotonFlowScene( registerDataModels(), mainSplitter );
 
 	auto * sidebarSplitter = new QSplitter( Qt::Vertical );
 	mainSplitter->addWidget( sidebarSplitter );
@@ -77,8 +82,17 @@ CentralWidget::CentralWidget( QWidget * parent )
 
 	sidebarSplitter->setSizes( { 10000, 10000, 20000 } );
 
-	mainSplitter->addWidget( flowView );
-	flowView->setMinimumWidth( 256 );
+	auto * gridHelpSplitter = new QSplitter( Qt::Vertical );
+	mainSplitter->addWidget( gridHelpSplitter  );
+	gridHelpSplitter->setHandleWidth( 4 );
+	gridHelpSplitter->setMinimumWidth( 256 );
+
+	flowView = new FlowView( flowScene );
+	gridHelpSplitter->addWidget( flowView );
+
+	helpWidget = new LotonHelpWidget();
+	gridHelpSplitter->addWidget( helpWidget );
+	gridHelpSplitter->setSizes( { 100000, 30000 } );
 
 	mainSplitter->setSizes( {10000, 30000} );
     }

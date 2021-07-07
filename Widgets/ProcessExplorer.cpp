@@ -26,7 +26,7 @@ ProcessTree::ProcessTree()
 QString ProcessExplorer::skipText = QStringLiteral("skip me");
 
 // This widget is a nearly direct copy of the NodeEditor context menu
-ProcessExplorer::ProcessExplorer( XFlowScene * scene )
+ProcessExplorer::ProcessExplorer( LotonFlowScene * scene )
 	{
 	setLayout( new QVBoxLayout );
 	layout()->setContentsMargins( 0, 0, 0, 0 );

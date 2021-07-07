@@ -18,6 +18,16 @@ struct PVOCRemoveNLoudestPartialsModel : public PVOCProcessModel
 	ControllerPairs makeInputControllers() override final;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(At any given time, Num Partials should return a number of bins, N, to remove.
+The N loudest bin positions are 0 filled in the output. All other bins are copied to the output.
+
+Num Partials - 1->1:
+	The number of partials to remove as a function of time.
+		)";
+		}
 
 	std::unique_ptr<NumberSliderModel> sliderModel;
 	};

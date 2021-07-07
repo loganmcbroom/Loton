@@ -21,21 +21,22 @@ AudioTextureSimpleModel::AudioTextureSimpleModel()
 	, eventLengthModel( new NumberSliderModel( .1, 0, NumberSlider::infinity ) )
 	, panModel( new NumberSliderModel( 0, -1, 1 ) )
 	{
-	auto sliderSetup = [this]( NumberSliderModel * m )
+	auto sliderSetup = [this]( NumberSliderModel * m, int port )
 		{
 		QObject::connect( m, &NumberSliderModel::stateChanged, this, &AudioTextureSimpleModel::updateData );
 		auto v = new NumberSliderView( m );
 		mainLayout->addWidget( v );
 		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
 		};
 
-	sliderSetup( lengthModel.get() );
-	sliderSetup( eventsPerSecondModel.get() );
-	sliderSetup( scatterModel.get() );
-	sliderSetup( repitchModel.get() );
-	sliderSetup( gainModel.get() );
-	sliderSetup( eventLengthModel.get() );
-	sliderSetup( panModel.get() );
+	sliderSetup( lengthModel.get(), 1 );
+	sliderSetup( eventsPerSecondModel.get(), 2 );
+	sliderSetup( scatterModel.get(), 3 );
+	sliderSetup( repitchModel.get(), 4 );
+	sliderSetup( gainModel.get(), 5 );
+	sliderSetup( eventLengthModel.get(), 6 );
+	sliderSetup( panModel.get(), 7 );
 	}
 
 AudioTextureSimpleModel::~AudioTextureSimpleModel() = default;

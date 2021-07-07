@@ -20,6 +20,21 @@ struct AudioDelayModel : public AudioFeedbackProcessModel
 	ControllerPairs makeInputControllers() override final;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(Generates a volume-decaying iteration of the input. If a mod is supplied, it will be fed the previous iteration's ouput, rather than the original Audio.
+
+Length - Number:
+	The output length.
+
+Delay Time - 1->1:
+	 The amount of time between delays.
+
+Decay - 1->1:
+	Each delayed copy of the input will have its gain scaled by the decay at the event time. This is applied recursively, so a constant decay will fade out over time.
+		)";
+		}
 
 	std::unique_ptr<NumberSliderModel> lengthModel;
 	std::unique_ptr<NumberSliderModel> delayModel;

@@ -21,6 +21,7 @@ struct AudioSingleSliderProcessModel : public AudioProcessModel
 	ControllerPairs makeInputControllers() override final;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
 
 	std::unique_ptr<NumberSliderModel> sliderModel;
 	};

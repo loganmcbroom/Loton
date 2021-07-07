@@ -12,20 +12,23 @@
 
 PVOCResonateModel::PVOCResonateModel()
 	: PVOCProcessModel()
-	, resTimeModel( new NumberSliderModel( 0.5f, 0, NumberSlider::infinity ) )
 	, lengthModel( new NumberSliderModel( 0.0, 0, NumberSlider::infinity ) )
+	, resTimeModel( new NumberSliderModel( 0.5f, 0, NumberSlider::infinity ) )
 	{
-	auto resTimeView = new NumberSliderView( resTimeModel.get() );
 	auto lengthView = new NumberSliderView( lengthModel.get() );
-	resTimeView->setMinimumSize( 64, 20 );
+	auto resTimeView = new NumberSliderView( resTimeModel.get() );
 	lengthView->setMinimumSize( 64, 20 );
-	mainLayout->addWidget( resTimeView );
+	resTimeView->setMinimumSize( 64, 20 );
 	mainLayout->addWidget( lengthView );
+	mainLayout->addWidget( resTimeView );
+	setToolTipToPort( lengthView, 2 );
+	setToolTipToPort( resTimeView, 1 );
 
-	QObject::connect( resTimeModel.get(), &NumberSliderModel::stateChanged,
-					this, &PVOCResonateModel::updateData );
 	QObject::connect( lengthModel.get(), &NumberSliderModel::stateChanged,
 					this, &PVOCResonateModel::updateData );
+	QObject::connect( resTimeModel.get(), &NumberSliderModel::stateChanged,
+					this, &PVOCResonateModel::updateData );
+
 	}
 
 bool PVOCResonateModel::process()
@@ -33,12 +36,12 @@ bool PVOCResonateModel::process()
 	if( ! ins[0] ) return false;
 
 	auto in = std::dynamic_pointer_cast<PVOCData>( ins[0] )->pvoc;
-	auto res = tryLockingInput<Func2x1Data>( ins[1], resTimeModel->getSliderPosition() );
 	auto length = tryLockingInput<NumberData>( ins[2], in.getLength() + lengthModel->getSliderPosition() );
+	auto res = tryLockingInput<Func2x1Data>( ins[1], resTimeModel->getSliderPosition() );
 
-	setFunctor( [in, res, length, c = canceller]()
+	setFunctor( [in, length, res, c = canceller]()
 		{
-		return std::shared_ptr<NodeData>( new PVOCData( in.resonate( res->f, length->f, *c ) ) );
+		return std::shared_ptr<NodeData>( new PVOCData( in.resonate( length->f, res->f, *c ) ) );
 		});
 
 	return true;
@@ -52,8 +55,8 @@ QString PVOCResonateModel::portCaption( PortType type, PortIndex index ) const
 		switch( index )
 			{
 			case 0: return "PVOC";
-			case 1: return "Resonation";
-			case 2: return "Extension";
+			case 1: return "Length";
+			case 2: return "Decay";
 			}
 	else if( type == PortType::Out )
 		switch( index )
@@ -79,8 +82,8 @@ NodeDataType PVOCResonateModel::dataType( PortType type, PortIndex index ) const
 		switch( index )
 			{
 			case 0: return PVOCData::Type();
-			case 1: return Func2x1Data::Type();
-			case 2: return NumberData::Type();
+			case 1: return NumberData::Type();
+			case 2: return Func2x1Data::Type();
 			default: return {"",""};
 			}
 	else if( type == PortType::Out )
@@ -95,23 +98,23 @@ NodeDataType PVOCResonateModel::dataType( PortType type, PortIndex index ) const
 ControllerPairs PVOCResonateModel::makeInputControllers()
 	{
 	return {
-		{ portCaption( PortType::In, 1 ), new NumberSliderView( resTimeModel.get() ) },
-		{ portCaption( PortType::In, 2 ), new NumberSliderView( lengthModel.get() ) }
+		{ portCaption( PortType::In, 1 ), new NumberSliderView( lengthModel.get() ) },
+		{ portCaption( PortType::In, 2 ), new NumberSliderView( resTimeModel.get() ) }
 		};
 	}
 
 QJsonObject PVOCResonateModel::save() const
 	{
 	QJsonObject modelJson = NodeDataModel::save();
-	modelJson["resTime"] = resTimeModel->save();
 	modelJson["length"] = lengthModel->save();
+	modelJson["resTime"] = resTimeModel->save();
 	return modelJson;
 	}
 
 void PVOCResonateModel::restore( QJsonObject const & p )
 	{
-	resTimeModel->restore( p["resTime"].toObject() );
 	lengthModel->restore( p["length"].toObject() );
+	resTimeModel->restore( p["resTime"].toObject() );
 	}
 
 

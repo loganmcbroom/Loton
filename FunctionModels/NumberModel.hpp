@@ -22,6 +22,12 @@ public:
 	void wipeOutputs( PortIndex ) override;
 	QJsonObject save() const override;
 	void restore( const QJsonObject & ) override;
+	std::vector<PortIndex> portsRequired() const override { return {}; }
+	QString description() const override
+		{
+		return R"(Just a number.
+		)";
+		}
 
 	std::shared_ptr<LotonNodeData> out;
 	std::unique_ptr<NumberSliderModel> numberModel;

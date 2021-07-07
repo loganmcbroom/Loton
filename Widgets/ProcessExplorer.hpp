@@ -2,7 +2,7 @@
 
 #include <QTreeWidget>
 
-class XFlowScene;
+class LotonFlowScene;
 class QTreeWidgetItem;
 
 class ProcessTree : public QTreeWidget
@@ -16,7 +16,7 @@ class ProcessExplorer : public QWidget
 public:
 	static QString skipText;
 
-	ProcessExplorer( XFlowScene * scene );
+	ProcessExplorer( LotonFlowScene * scene );
 
 	ProcessTree * tree; // Memory managed by layout
 

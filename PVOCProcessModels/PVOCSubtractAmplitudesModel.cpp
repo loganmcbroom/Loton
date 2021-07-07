@@ -18,6 +18,7 @@ PVOCSubtractAmplitudesModel::PVOCSubtractAmplitudesModel()
 					this, &PVOCSubtractAmplitudesModel::updateData );
 
 	auto sliderView = new NumberSliderView( sliderModel.get() );
+	setToolTipToPort( sliderView, 2 );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
 	}

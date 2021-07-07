@@ -43,7 +43,7 @@ QString Func1x1PointInterpolationModel::caption() const
 
 QString Func1x1PointInterpolationModel::name() const
 	{
-	return "Func1x1 Point Interpolator";
+	return "1->1 Point Interpolator";
 	}
 
 std::shared_ptr<Func1x1Data> Func1x1PointInterpolationModel::function()

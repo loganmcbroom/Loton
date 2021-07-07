@@ -20,6 +20,7 @@ AudioModifyVolumeModel::AudioModifyVolumeModel()
 	auto sliderView = new NumberSliderView( sliderModel.get() );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
+	setToolTipToPort( sliderView, 1 );
 	}
 
 bool AudioModifyVolumeModel::process()

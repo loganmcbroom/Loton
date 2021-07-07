@@ -3,13 +3,14 @@
 #include <QStackedWidget>
 
 namespace QtNodes { class FlowView; };
-class XFlowScene;
+class LotonFlowScene;
 class SettingsMenu;
 class CentralWidget;
 
 class SampleExplorer;
 class ProcessExplorer;
 class NodeControlPanel;
+class LotonHelpWidget;
 
 class CentralWidgetManager : public QStackedWidget
 { Q_OBJECT
@@ -22,6 +23,7 @@ public:
 public slots:
 	void showCentralWidget();
 	void showSettingsMenu();
+	void toggleHelp();
 };
 
 
@@ -37,5 +39,6 @@ public:
 	ProcessExplorer * processTree;
 	NodeControlPanel * controlPanel;
 	QtNodes::FlowView * flowView;
-	XFlowScene * flowScene;
+	LotonFlowScene * flowScene;
+	LotonHelpWidget * helpWidget;
 };

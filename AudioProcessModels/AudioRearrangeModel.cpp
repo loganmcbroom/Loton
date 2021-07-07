@@ -16,16 +16,17 @@ AudioRearrangeModel::AudioRearrangeModel()
 	, sliceLengthModel( new NumberSliderModel( 1, 0.001, NumberSlider::infinity ) )
 	, fadeLengthModel( new NumberSliderModel( 0.05, 0, NumberSlider::infinity ) )
 	{
-	auto sliderSetup = [this]( NumberSliderModel * m )
+	auto sliderSetup = [this]( NumberSliderModel * m, int port )
 		{
 		QObject::connect( m, &NumberSliderModel::stateChanged, this, &AudioRearrangeModel::updateData );
 		auto v = new NumberSliderView( m );
 		mainLayout->addWidget( v );
 		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
 		};
 
-	sliderSetup( sliceLengthModel.get() );
-	sliderSetup( fadeLengthModel.get() );
+	sliderSetup( sliceLengthModel.get(), 1 );
+	sliderSetup( fadeLengthModel.get(), 2 );
 	}
 
 AudioRearrangeModel::~AudioRearrangeModel() = default;

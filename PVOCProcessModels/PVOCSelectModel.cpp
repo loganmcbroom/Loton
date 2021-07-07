@@ -1,5 +1,7 @@
 #include "PVOCSelectModel.hpp"
 
+#include <QBoxLayout>
+
 #include "Widgets/NumberSlider.hpp"
 #include "Widgets/Interpolator.hpp"
 
@@ -11,9 +13,14 @@
 
 PVOCSelectModel::PVOCSelectModel()
 	: PVOCProcessModel()
-	, lengthModel( new NumberSliderModel( 0, 0, NumberSlider::infinity ) )
+	, lengthModel( new NumberSliderModel( 0, 1, NumberSlider::infinity ) )
 	, interpModel( new InterpolatorModel() )
 	{
+	auto lengthView = new NumberSliderView( lengthModel.get() );
+	setToolTipToPort( lengthView, 1 );
+	mainLayout->addWidget( lengthView );
+	lengthView->setMinimumSize( 64, 20 );
+
 	QObject::connect( lengthModel.get(), &NumberSliderModel::stateChanged,
 					  this, &PVOCSelectModel::updateData );
 	}
@@ -26,7 +33,6 @@ bool PVOCSelectModel::process()
 	auto length = tryLockingInput<NumberData>( ins[1], lengthModel->getSliderPosition() );
 	auto selector = std::dynamic_pointer_cast<Func2x2Data>( ins[2] );
 	auto interp = tryLockingInput<InterpolatorData>( ins[3], interpModel->getInterpolator() );
-
 
 	setFunctor( [in, length, selector, interp, c = canceller]()
 		{

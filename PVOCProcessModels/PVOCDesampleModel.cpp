@@ -22,6 +22,7 @@ PVOCDesampleModel::PVOCDesampleModel()
 					this, &PVOCDesampleModel::updateData );
 
 	auto sliderView = new NumberSliderView( factorModel.get() );
+	setToolTipToPort( sliderView, 1 );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
 	}

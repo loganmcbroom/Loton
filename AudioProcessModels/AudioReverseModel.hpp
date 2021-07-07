@@ -12,4 +12,9 @@ struct AudioReverseModel : public AudioSimpleTransformModel
 
 	QString caption() const override;
 	QString name() const override;
+	QString description() const override
+		{
+		return R"(This reverses the input.
+		)";
+		}
 	};

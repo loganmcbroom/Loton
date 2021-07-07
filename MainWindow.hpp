@@ -36,12 +36,19 @@ public slots:
 	void projectFolderSelect();
 	void updateTitle();
 
+	void createMixNode();
+	void createJoinNode();
+	void createCutNode();
+	void createSetVolumeNode();
+	void createPanNode();
+
 private:
 	friend class SettingsMenu;
 
 	MainWindow();
 	static MainWindow * instance;
 
+	void createNode( QString nodeName );
     void closeEvent( QCloseEvent * event ) override;
     bool maybeSave();
     void loadProject( const QString & fileName );
@@ -64,6 +71,12 @@ private:
 	QAction * redoAct;
 	QAction * sampleFolderSelectAct;
 	QAction * projectFolderSelectAct;
+
+	QAction * nodeMixAct;
+	QAction * nodeJoinAct;
+	QAction * nodeCutAct;
+	QAction * nodeSetVolumeAct;
+	QAction * nodePanAct;
 };
 
 

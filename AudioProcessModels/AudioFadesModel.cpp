@@ -17,7 +17,7 @@ AudioFadesModel::AudioFadesModel()
 	, endLengthModel( new NumberSliderModel( .05f, 0, NumberSlider::infinity ) )
 	, interpModel( new InterpolatorModel( InterpolatorType::squareroot ) )
 	{
-	auto sliderSetup = [this]( NumberSliderModel * m )
+	auto sliderSetup = [this]( NumberSliderModel * m, int port )
 		{
 		QObject::connect( m, &NumberSliderModel::stateChanged,
 						this, &AudioFadesModel::updateData );
@@ -25,10 +25,11 @@ AudioFadesModel::AudioFadesModel()
 		auto v = new NumberSliderView( m );
 		mainLayout->addWidget( v );
 		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
 		};
 
-	sliderSetup( startLengthModel.get() );
-	sliderSetup( endLengthModel.get() );
+	sliderSetup( startLengthModel.get(), 1 );
+	sliderSetup( endLengthModel.get(), 2 );
 
 	QObject::connect( interpModel.get(), &InterpolatorModel::stateChanged,
 						this, &AudioFadesModel::updateData );

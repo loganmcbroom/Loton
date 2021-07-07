@@ -12,4 +12,12 @@ struct AudioSetVolumeModel : public AudioSingleSliderProcessModel
 
 	QString caption() const override;
 	QString name() const override;
+	QString description() const override
+		{
+		return R"(This normalizes and then scales each sample by the factor.
+
+Level - 1->1:
+	The gain scale.
+		)";
+		}
 	};

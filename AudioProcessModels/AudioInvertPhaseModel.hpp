@@ -12,5 +12,10 @@ struct AudioInvertPhaseModel : public AudioSimpleTransformModel
 
 	QString caption() const override;
 	QString name() const override;
+	QString description() const override
+		{
+		return R"(Standard phase inversion. Every sample s is assigned -s.
+		)";
+		}
 	};
 

@@ -20,15 +20,19 @@ AudioConvertToPVOCModel::AudioConvertToPVOCModel()
 	, fftSizeModel( new NumberSliderModel( Settings::PVOCFFTSize(), 0, 24 ) )
 	, converter( new AudioToPVOCConverter() )
 	{
+	auto addSlider = [this]( NumberSliderModel * m, int port )
+		{
+		m->setFilter( []( float x ) { return std::round( x ); } );
+		QObject::connect( m, &NumberSliderModel::stateChanged, this, &AudioConvertToPVOCModel::updateData );
+		auto v = new NumberSliderView( m );
+		mainLayout->addWidget( v );
+		v->setMinimumSize( 64, 20 );
+		setToolTipToPort( v, port );
+		};
 
-	windowSizeModel->setFilter( []( float x ) { return std::round( x ); } );
-	QObject::connect( windowSizeModel.get(), &NumberSliderModel::stateChanged, this, &AudioConvertToPVOCModel::updateData );
-
-	hopSizeModel->setFilter( [this]( float x ) { return std::round( x ); } );
-	QObject::connect( hopSizeModel.get(), &NumberSliderModel::stateChanged, this, &AudioConvertToPVOCModel::updateData );
-
-	fftSizeModel->setFilter( [this]( float x ) { return std::round( x ); } );
-	QObject::connect( fftSizeModel.get(), &NumberSliderModel::stateChanged, this, &AudioConvertToPVOCModel::updateData );
+	addSlider( windowSizeModel.get(), 1 );
+	addSlider( hopSizeModel.get(), 2 );
+	addSlider( fftSizeModel.get(), 3 );
 
 	QObject::connect( converter.get(), &AudioToPVOCConverter::finished, this, [this]( std::shared_ptr<NodeData> data )
 		{

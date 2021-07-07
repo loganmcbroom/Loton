@@ -17,6 +17,7 @@ PVOCRemoveNLoudestPartialsModel::PVOCRemoveNLoudestPartialsModel()
 					this, &PVOCRemoveNLoudestPartialsModel::updateData );
 
 	auto sliderView = new NumberSliderView( sliderModel.get() );
+	setToolTipToPort( sliderView, 1 );
 	mainLayout->addWidget( sliderView );
 	sliderView->setMinimumSize( 64, 20 );
 	}

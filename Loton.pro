@@ -9,7 +9,6 @@ CONFIG += c++17
 
 HEADERS += \
 	AudioFeedbackProcessModel.hpp \
-	AudioProcessModels/AudioConvertToFunctionModel.hpp \
 	AudioProcessModels/AudioConvertToLeftRightModel.hpp \
 	AudioProcessModels/AudioConvertToMidSideModel.hpp \
 	AudioProcessModels/AudioConvertToMonoModel.hpp \
@@ -27,6 +26,7 @@ HEADERS += \
 	AudioProcessModels/AudioIterateModel.hpp \
 	AudioProcessModels/AudioJoinModel.hpp \
 	AudioProcessModels/AudioLengthModel.hpp \
+	AudioProcessModels/AudioMaxModel.hpp \
 	AudioProcessModels/AudioMixModel.hpp \
 	AudioProcessModels/AudioModifyVolumeModel.hpp \
 	AudioProcessModels/AudioPanModel.hpp \
@@ -44,6 +44,7 @@ HEADERS += \
 	Converters/SoundConverters.hpp \
 	FeedbackNodeHandlers/AudioFeedbackWorker.hpp \
 	FlanProcessModel.hpp \
+	FunctionModels/AudioConvertToFunctionModel.hpp \
 	FunctionModels/DistributionExponentialModel.hpp \
 	FunctionModels/DistributionModel.hpp \
 	FunctionModels/DistributionNormalModel.hpp \
@@ -114,6 +115,7 @@ HEADERS += \
 	PVOCProcessModels/PVOCModifyTimeModel.hpp \
 	PVOCProcessModels/PVOCProcessModel.hpp \
     Registration.hpp \
+	Widgets/LotonHelpWidget.hpp \
 	Widgets/LuaSyntaxHighlighter.hpp \
 	Widgets/OnOffButton.hpp \
 	Widgets/PVOCPlayer.hpp \
@@ -136,7 +138,6 @@ HEADERS += \
 	pvocProcessModel.hpp
 
 SOURCES += \
-	AudioProcessModels/AudioConvertToFunctionModel.cpp \
 	AudioProcessModels/AudioConvertToLeftRightModel.cpp \
 	AudioProcessModels/AudioConvertToMidSideModel.cpp \
 	AudioProcessModels/AudioConvertToMonoModel.cpp \
@@ -154,6 +155,7 @@ SOURCES += \
 	AudioProcessModels/AudioIterateModel.cpp \
 	AudioProcessModels/AudioJoinModel.cpp \
 	AudioProcessModels/AudioLengthModel.cpp \
+	AudioProcessModels/AudioMaxModel.cpp \
 	AudioProcessModels/AudioMixModel.cpp \
 	AudioProcessModels/AudioModifyVolumeModel.cpp \
 	AudioProcessModels/AudioPanModel.cpp \
@@ -175,6 +177,7 @@ SOURCES += \
 	Converters/SoundConverters.cpp \
 	FeedbackNodeHandlers/AudioFeedbackWorker.cpp \
 	FlanProcessModel.cpp \
+	FunctionModels/AudioConvertToFunctionModel.cpp \
 	FunctionModels/DistributionExponentialModel.cpp \
 	FunctionModels/DistributionModel.cpp \
 	FunctionModels/DistributionNormalModel.cpp \
@@ -232,6 +235,7 @@ SOURCES += \
 	Widgets/FunctionGeneratorPlot2x1.cpp \
 	Widgets/FunctionGeneratorPlot2x2.cpp \
 	Widgets/Interpolator.cpp \
+	Widgets/LotonHelpWidget.cpp \
 	Widgets/LuaSyntaxHighlighter.cpp \
 	Widgets/OnOffButton.cpp \
 	Widgets/PVOCPlayer.cpp \
@@ -261,30 +265,30 @@ RESOURCES += \
 DEFINES += NODE_EDITOR_STATIC
 	 win32:CONFIG(release, debug|release): LIBS += -LC:/libs/build-nodeeditor-fork-Desktop_x64_windows_msvc2019_pe_64bit-Release/lib/ -lnodes
 else:win32:CONFIG(debug,   debug|release): LIBS += -LC:/libs/build-nodeeditor-fork-Desktop_x64_windows_msvc2019_pe_64bit-Debug/lib/ -lnodes
-INCLUDEPATH += C:/libs/nodeeditor-master/include
-DEPENDPATH += C:/libs/nodeeditor-master/include
+INCLUDEPATH += C:/libs/nodeeditor-fork/include
+DEPENDPATH += C:/libs/nodeeditor-fork/include
 
 
 #libsndfile
 win32: LIBS += -LC:/libs/libsndfile/lib/ -lsndfile
 INCLUDEPATH += C:/libs/libsndfile/include
 DEPENDPATH += C:/libs/libsndfile/include
-win32:!win32-g++: PRE_TARGETDEPS += C:/libs/libsndfile/lib/sndfile.lib
-else:win32-g++: PRE_TARGETDEPS += C:/libs/libsndfile/lib/libsndfile.a
+#win32:!win32-g++: PRE_TARGETDEPS += C:/libs/libsndfile/lib/sndfile.lib
+#else:win32-g++: PRE_TARGETDEPS += C:/libs/libsndfile/lib/libsndfile.a
 
 
 #fftw
 win32: LIBS += -LC:/libs/fftw/ -llibfftw3f-3
 INCLUDEPATH += C:/libs/fftw
 DEPENDPATH += C:/libs/fftw
-win32:!win32-g++: PRE_TARGETDEPS += C:/libs/fftw/libfftw3f-3.lib
-else:win32-g++: PRE_TARGETDEPS += C:/libs/fftw/liblibfftw3f-3.a
+#win32:!win32-g++: PRE_TARGETDEPS += C:/libs/fftw/libfftw3f-3.lib
+#else:win32-g++: PRE_TARGETDEPS += C:/libs/fftw/liblibfftw3f-3.a
 
 
 #OpenCL
 win32: LIBS += -L'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/' -lOpenCL
-win32:!win32-g++: PRE_TARGETDEPS += 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/OpenCL.lib'
-else:win32-g++: PRE_TARGETDEPS += 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/libOpenCL.a'
+#win32:!win32-g++: PRE_TARGETDEPS += 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/OpenCL.lib'
+#else:win32-g++: PRE_TARGETDEPS += 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/libOpenCL.a'
 INCLUDEPATH += 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/CL'
 DEPENDPATH += 'C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/CL'
 

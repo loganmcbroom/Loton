@@ -18,6 +18,12 @@ struct AudioJoinModel : public AudioProcessModel
 	NodeDataType dataType( PortType type, PortIndex index ) const override;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return {}; }
+	QString description() const override
+		{
+		return R"(This joins all input Audio tip to tail in the order they were passed.
+		)";
+		}
 
 	virtual void inputConnectionCreated( PortIndex ) override;
 	virtual void inputConnectionDeleted( PortIndex ) override;

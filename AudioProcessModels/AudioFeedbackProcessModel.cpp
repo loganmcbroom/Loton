@@ -88,13 +88,14 @@ void AudioFeedbackProcessModel::updateData()
 		{
 		t->start();
 		} );		
-	timeoutTimer->start();
+
 
 	bool accepted = process();
 
 	if( accepted )
 		{
 		setValidationState( QtNodes::NodeValidationState::Valid, "" );
+		timeoutTimer->start();
 		emit computingStarted();
 		}
 	else

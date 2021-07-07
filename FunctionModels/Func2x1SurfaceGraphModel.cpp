@@ -48,7 +48,7 @@ QString Func2x1SurfaceGraphModel::name() const
 
 QString Func2x1SurfaceGraphModel::portCaption( PortType, PortIndex ) const
 	{
-	return "Func2x1";
+	return "2->1";
 	}
 
 void Func2x1SurfaceGraphModel::inputsUpdated( std::shared_ptr<NodeData> data, PortIndex )

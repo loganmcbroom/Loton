@@ -12,5 +12,13 @@ struct AudioWidenModel : public AudioSingleSliderProcessModel
 
 	QString caption() const override;
 	QString name() const override;
+	QString description() const override
+		{
+		return R"(This redistributes energy between the mid and side signals.
+
+Factor - 1->1:
+	Values on ranging from -1 to 1 distribute energy towards the mid and side signals respectively.
+		)";
+		}
 	};
 

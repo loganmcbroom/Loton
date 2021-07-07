@@ -27,6 +27,15 @@ public:
 	virtual void inputConnectionDeleted( PortIndex ) override;
 	virtual ControllerPairs makeInputControllers() override;
 	virtual QWidget * makeHeaderWidget() override;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(This provides a 3D graph of the input surface in the node view.
+
+Input - 2->1:
+	The surface to graph.
+		)";
+		}
 
 	std::shared_ptr<NodeData> out;
 	std::unique_ptr<SurfaceGraphModel> graphModel;

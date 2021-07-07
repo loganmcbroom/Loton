@@ -26,6 +26,7 @@ public:
 	void inputsUpdated( std::shared_ptr<NodeData>, PortIndex ) override final;
 	void wipeOutputs( PortIndex ) override;
 	std::shared_ptr<NodeData> outData( PortIndex = 0 ) override final;
+	std::vector<PortIndex> portsRequired() const override { return {}; }
 
 protected:
 	std::weak_ptr<NumberData> in;

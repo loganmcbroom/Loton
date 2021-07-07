@@ -17,6 +17,14 @@ public:
 	QString graphTitle() const override { return "P = 1/(b - a + 1)"; }
 	std::shared_ptr<Func1x1Data> sliderFunction( const std::vector<float> & sliderValues ) override;
 	void generateGraphFunction( const std::vector<float> & vs ) override;
+	QString description() const override
+		{
+		return R"(Distribution with a PDF of 1/(b - a + 1) returning only integers.
+
+Seed - Number:
+	If provided, the distribution will use this as a fixed seed.
+		)";
+		}
 };
 
 

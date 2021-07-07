@@ -20,6 +20,18 @@ struct PVOCReplaceAmplitudesModel : public PVOCProcessModel
 	ControllerPairs makeInputControllers() override final;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return { 0, 1 }; }
+	QString description() const override
+		{
+		return R"(This replaces the amplitudes of bins in the input with those in Amp Source.
+
+Amp Source - PVOC:
+	This provides the output amplitudes.
+
+Amount - 2->1:
+	An Amount of 1 fully replaces the amplitudes, 0 does nothing, and amounts between give a linear interpolation of the two.
+		)";
+		}
 
 	std::unique_ptr<NumberSliderModel> sliderModel;
 	};

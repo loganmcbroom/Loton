@@ -19,6 +19,12 @@ public:
 	NodeDataType dataType( PortType type, PortIndex index ) const override;
 	QJsonObject save() const override;
 	void restore( QJsonObject const & p ) override;
+	std::vector<PortIndex> portsRequired() const override { return {}; }
+	QString description() const override
+		{
+		return R"(This is an audio source.
+		)";
+		}
 
 	void setFile( const QString & filepath );
 

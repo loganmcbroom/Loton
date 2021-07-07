@@ -20,6 +20,24 @@ struct AudioTextureModel : public AudioFeedbackProcessModel
 	ControllerPairs makeInputControllers() override final;
 	QJsonObject save() const override final;
 	void restore( QJsonObject const & p ) override final;
+	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
+	QString description() const override
+		{
+		return R"(Texture is the main Audio timing function.
+Events are generated following the provided Events Per Second and Scatter.
+Each event places a copy of the input Audio at the event time.
+
+Length - Number:
+	Events will generate until this time.
+
+Events Per Second - 1->1:
+	The mean number of events per second.
+
+Scatter 1->1:
+	The standard deviation in events. Due to being in events, a higher
+	Events Per Second will cause scatter to have less of an effect.
+		)";
+		}
 
 	std::unique_ptr<NumberSliderModel> lengthModel;
 	std::unique_ptr<NumberSliderModel> eventsPerSecondModel;

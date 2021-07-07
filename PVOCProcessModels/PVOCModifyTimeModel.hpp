@@ -17,6 +17,15 @@ public:
 	QString portCaption(PortType, PortIndex) const override;
 	unsigned int nPorts( PortType type ) const override;
 	NodeDataType dataType( PortType type, PortIndex index ) const override;
+	std::vector<PortIndex> portsRequired() const override { return { 0, 1 }; }
+	QString description() const override
+		{
+		return R"(Each input point is mapped to an arbitrary output time by the Modifier.
+
+Modifier - 2->1:
+	Takes time/frequency points and returns the time those points should be moved to at the given frequency.
+		)";
+		}
 
 	ControllerPairs makeInputControllers() override;
 
