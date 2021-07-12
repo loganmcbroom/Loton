@@ -31,7 +31,7 @@ Loton relies on the following:
 		Open qwt.pro in QtCreator
 		Hit build
 
-	LuaJit: https://luajit.org/
+	LuaJit
 		git clone https://luajit.org/git/luajit.git
 		cd luajit
 		make
