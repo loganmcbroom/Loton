@@ -17,7 +17,7 @@ struct FlanProcessModel::PainterDelegate : public NodePainterDelegate
 {
 	void paint( QPainter * p, const NodeGeometry &, const NodeDataModel * model ) override
 		{
-		p->drawPixmap( -3, -3, LED::size, LED::size,
+		p->drawPixmap( -3, -3, LED::size(), LED::size(),
 			dynamic_cast<const FlanProcessModel *>( model )->indicator->pix );
 		}
 };

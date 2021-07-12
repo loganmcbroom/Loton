@@ -18,17 +18,11 @@ Ideas:
 	indicate point intep point positions with display in corner
 
 Completed:
-	Some tooltips
-	Port required indication
-	Node help window
-	Common node shortcuts
-	Misc. bug fixes
 
 Todo:
-	cmake transition
+	Icon
 
 Task:
-
 */
 
 
