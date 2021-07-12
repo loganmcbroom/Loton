@@ -6,6 +6,7 @@ Guide coming soon, for now drag and drop audio and functions into the graph and 
 
 # Building
 Loton relies on the following:
+
 	libsndfile
 		git clone https://github.com/libsndfile/libsndfile.git
 		cd libsndfile
@@ -21,7 +22,7 @@ Loton relies on the following:
 
 	OpenCL: 
 		This should exist on most computers already.
-		Not having an OpenCL installed is not a problem I've had to solve, so contact me if you need help with it.
+		Contact me if you need help with it.
 
 	Qwt
 		I don't know of a build of this not relying on QtCreator.
