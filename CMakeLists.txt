@@ -1,24 +1,10 @@
-cmake_minimum_required( VERSION 3.2 )
+cmake_minimum_required( VERSION 3.15 )
 
 project( Loton VERSION 1.7 LANGUAGES CXX )
 
-set( CMAKE_CXX_STANDARD 17 )
-set( CMAKE_CXX_STANDARD_REQUIRED ON )
-set( CMAKE_DISABLE_IN_SOURCE_BUILD ON )
-set( CMAKE_DISABLE_SOURCE_CHANGES  ON )
-
 set( CMAKE_AUTOMOC ON )
 set( CMAKE_AUTORCC ON )
-
-# Find Qt components
-find_package( Qt5 5.3 COMPONENTS
-    Core
-    Gui
-    Multimedia
-    Concurrent
-    DataVisualization
-    Widgets
-    )
+set( CMAKE_AUTOUIC ON )
 
 # Create execulable
 add_executable( Loton
@@ -30,17 +16,10 @@ add_executable( Loton
 	src/LotonFlowScene.cpp 
 	src/LotonNodeModel.cpp 
 	src/NodeControlPanel.cpp 
-	#src/TypeInfo.hpp 
 	src/Settings.cpp 
 	src/CentralWidget.cpp
 
-	#src/NodeDataTypes/AudioData.hpp 
-    #src/NodeDataTypes/PVOCData.hpp
-	#src/NodeDataTypes/FunctionData.cpp 
-	#src/NodeDataTypes/InterpolatorData.cpp 
 	src/NodeDataTypes/LotonNodeData.cpp 
-	#src/NodeDataTypes/NumberData.cpp 
-	#src/NodeDataTypes/WipeNodeData.cpp 
     
     src/AudioProcessModels/AudioFeedbackProcessModel.cpp
 	src/AudioProcessModels/AudioConvertToLeftRightModel.cpp
@@ -159,10 +138,25 @@ add_executable( Loton
     resources/Theme/breeze.qrc
     )
 
-target_include_directories( Loton PRIVATE
-	src )
+target_compile_features( Loton PRIVATE cxx_std_17 )
+set_target_properties( Loton PROPERTIES CXX_EXTENSIONS OFF )
+target_include_directories( Loton PRIVATE src )
 
-# Link Qt components
+
+#==================================================================================================
+# Link Libraries
+#==================================================================================================
+
+# Qt components
+find_package( Qt5 5.3 COMPONENTS
+    Core
+    Gui
+    Multimedia
+    Concurrent
+    DataVisualization
+    Widgets
+    ) 
+
 target_link_libraries( Loton PRIVATE
     Qt5::Core
     Qt5::Gui
@@ -172,29 +166,15 @@ target_link_libraries( Loton PRIVATE
     Qt5::Widgets
     )
 
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" )
 
-#==================================================================================================
-# Link Libraries
-#==================================================================================================
+# Flan
+find_package( Flan REQUIRED ) # Flan::Flan
+target_link_libraries( Loton PRIVATE Flan::Flan )
 
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/" )
-
-# NodeEditor - Debug available
-add_compile_definitions( NODE_EDITOR_STATIC )
+# NodeEditor
 find_package( NodeEditor REQUIRED ) # NodeEditor::NodeEditor
 target_link_libraries( Loton PRIVATE NodeEditor::NodeEditor )
-
-# libsndfile
-find_package( SndFile REQUIRED ) # SndFile::sndfile
-target_link_libraries( Loton PRIVATE SndFile::sndfile )
-
-# FFTW Float
-find_package( FFTWF REQUIRED ) # FFTWF::fftwf
-target_link_libraries( Loton PRIVATE FFTWF::fftwf )
-
-# OpenCL
-find_package( OpenCL REQUIRED ) # OpenCL::OpenCL
-target_link_libraries( Loton PRIVATE OpenCL::OpenCL )
 
 # Qwt
 add_compile_definitions( QWT_DLL )
@@ -205,7 +185,9 @@ target_link_libraries( Loton PRIVATE Qwt::Qwt )
 find_package( LuaJit REQUIRED ) # LuaJit::LuaJit
 target_link_libraries( Loton PRIVATE LuaJit::LuaJit )
 
-# Flan
-find_package( Flan REQUIRED ) # Flan::Flan
-target_link_libraries( Loton PRIVATE Flan::Flan )
 
+#==================================================================================================
+# Installation
+#==================================================================================================
+
+install( TARGETS Loton DESTINATION bin )

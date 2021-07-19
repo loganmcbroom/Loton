@@ -2,7 +2,7 @@
 
 #include <QtWidgets>
 
-#include <fftw3.h>
+//#include <fftw3.h>
 
 #include "CentralWidget.hpp"
 #include "Widgets/SettingsMenu.hpp"
