@@ -1,9 +1,6 @@
 # Loton
 Experimental Audio Workstation  
 
-# Usage
-Guide coming soon, for now drag and drop audio and functions into the graph and connect them.
-
 # Building
 
 ### Dependencies:
@@ -21,6 +18,7 @@ git clone https://luajit.org/git/luajit.git
 cd luajit
 make
 ```
+Make sure the luajit folder is in the system PATH.
 
 #### Flan:
 See https://github.com/loganmcbroom/flan
@@ -32,6 +30,11 @@ See https://github.com/loganmcbroom/nodeeditor
 ```
 git clone https://github.com/loganmcbroom/Loton
 cd Loton
-cmake -S . -B build
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
+Finally, make sure the qwt and lua shared libraries are visible.
+
+# Usage
+
+Guide coming soon, for now drag and drop audio and functions into the graph and connect them.

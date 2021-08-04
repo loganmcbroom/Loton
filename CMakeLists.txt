@@ -1,4 +1,4 @@
-cmake_minimum_required( VERSION 3.15 )
+cmake_minimum_required( VERSION 3.20 )
 
 project( Loton VERSION 1.7 LANGUAGES CXX )
 
@@ -142,6 +142,10 @@ target_compile_features( Loton PRIVATE cxx_std_17 )
 set_target_properties( Loton PROPERTIES CXX_EXTENSIONS OFF )
 target_include_directories( Loton PRIVATE src )
 
+if( CMAKE_BUILD_TYPE STREQUAL "Release" )
+  set_property( TARGET Loton PROPERTY WIN32_EXECUTABLE true )
+endif()
+
 
 #==================================================================================================
 # Link Libraries
@@ -179,7 +183,9 @@ target_link_libraries( Loton PRIVATE NodeEditor::NodeEditor )
 # Qwt
 add_compile_definitions( QWT_DLL )
 find_package( Qwt REQUIRED ) # Qwt::Qwt
-target_link_libraries( Loton PRIVATE Qwt::Qwt )
+target_link_libraries( Loton PRIVATE 
+	debug Qwt::Qwt
+	optimized Qwt::Qwt )
 
 # LuaJit
 find_package( LuaJit REQUIRED ) # LuaJit::LuaJit

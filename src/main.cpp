@@ -22,20 +22,10 @@ Completed:
 Todo:
 	Icon
     crash on laptop
+    Usage guide
 
 Task:
-    check flan, ne, and loton cmakelists and readmes for mistakes after this mess time
-    push changes to github
-    install flan, ne, and loton after cleaning to see if everything is good
-
-    Debugging:  
-        look into how to have seperate debug builds
-
-    DLLs:
-        see how hard it would be to collect shared lib files during build step
-
-    Exporting:
-        not sure if this is worth supporting but it doesn't work atm
+    lastly do a clean install test
 */
 
 

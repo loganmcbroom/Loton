@@ -8,7 +8,7 @@
 LotonHelpWidget::LotonHelpWidget()
 	: QTextEdit()
 	{
-	setViewportMargins( 20, 20, 20, 20 );
+	//setViewportMargins( 20, 20, 20, 20 );
 
 	Settings::setDynamicColor( this, "QScrollArea { background-color: #%1; }", QPalette::Dark );
 

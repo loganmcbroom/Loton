@@ -1,57 +1,74 @@
 # Find Qwt library
 # 
 # Variables Set
-#  	QWT_FOUND 				- true if found on the system
-#  	QWT_LIBRARY_DIR 		- full path to library
-#  	QWT_INCLUDE_DIR 		- include directory path
+#  	Qwt_FOUND 				- true if found on the system
+#  	Qwt_LIBRARY_DIR 		- full path to library
+#  	Qwt_INCLUDE_DIR 		- include directory path
 #
 # Prefer interface: Qwt::Qwt
 #
 
-find_path( QWT_INCLUDE_DIR
-    NAME
-		qwt.h
+find_package( PkgConfig )
+pkg_check_modules( PC_Qwt QUIET Qwt )
+
+find_path( Qwt_INCLUDE_DIR
+    NAMES qwt.h
+	PATHS ${PC_Qwt_INCLUDE_DIRS}
 	PATH_SUFFIXES
 		src
 		qwt/src
 		qwt-6.1.6/src
   )
+ 
+find_library( Qwt_LIBRARY_RELEASE
+	NAME qwt
+	PATHS ${PC_Qwt_LIBRARY_DIRS} ${PC_Qwt_LIBRARY_DIRS}/Release
+	PATH_SUFFIXES
+		lib
+		qwt/lib
+		qwt-6.1.6/lib
+  )
 
-if( CMAKE_BUILD_TYPE STREQUAL "Release" )
-	find_library( QWT_LIBRARY_DIR
-		NAME
-			qwt.lib
-		PATH_SUFFIXES
-			lib
-			qwt/lib
-			qwt-6.1.6/lib
-	  )
-endif()
-if( CMAKE_BUILD_TYPE STREQUAL "Debug" )
-	find_library( QWT_LIBRARY_DIR
-		NAME
-			qwtd.lib
-		PATH_SUFFIXES
-			lib
-			qwt/lib
-			qwt-6.1.6/lib
-	  )
-endif()
+find_library( Qwt_LIBRARY_DEBUG
+	NAME qwtd
+	PATHS ${PC_Qwt_LIBRARY_DIRS} ${PC_Qwt_LIBRARY_DIRS}/Debug
+	PATH_SUFFIXES
+		lib
+		qwt/lib
+		qwt-6.1.6/lib
+  )
+ 
+# Handle Debug/Release builds
+include( SelectLibraryConfigurations )
+select_library_configurations( Qwt )
   
 include( FindPackageHandleStandardArgs )
 find_package_handle_standard_args( Qwt
+	FOUND_VAR Qwt_FOUND
 	REQUIRED_VARS 
-		QWT_INCLUDE_DIR
-		QWT_LIBRARY_DIR
-	HANDLE_COMPONENTS
+		Qwt_LIBRARY
+		Qwt_INCLUDE_DIR
+	VERSION_VAR Qwt_VERSION
 	)
 
-if( QWT_FOUND )
-	add_library( Qwt::Qwt INTERFACE IMPORTED )
-	set_target_properties( Qwt::Qwt
-		PROPERTIES 
-			INTERFACE_INCLUDE_DIRECTORIES ${QWT_INCLUDE_DIR}
-			INTERFACE_LINK_LIBRARIES ${QWT_LIBRARY_DIR}
+if( Qwt_FOUND )
+	if( NOT TARGET Qwt::Qwt )
+		add_library( Qwt::Qwt UNKNOWN IMPORTED )
+	endif()
+
+	if( Qwt_LIBRARY_RELEASE )
+		set_property( TARGET Qwt::Qwt APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE )
+		set_target_properties( Qwt::Qwt PROPERTIES IMPORTED_LOCATION_RELEASE "${Qwt_LIBRARY_RELEASE}" )
+	endif()
+
+	if( Qwt_LIBRARY_DEBUG )
+		set_property( TARGET Qwt::Qwt APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG )
+		set_target_properties( Qwt::Qwt PROPERTIES IMPORTED_LOCATION_DEBUG "${Qwt_LIBRARY_DEBUG}" )
+	endif()
+
+	set_target_properties( Qwt::Qwt PROPERTIES
+		INTERFACE_COMPILE_OPTIONS "${PC_Qwt_CFLAGS_OTHER}"
+		INTERFACE_INCLUDE_DIRECTORIES "${Qwt_INCLUDE_DIR}"
 	)
 else()
 	if( QWT_FIND_REQUIRED )
@@ -60,6 +77,6 @@ else()
 endif()
 
 mark_as_advanced(
-    QWT_INCLUDE_DIR
-    QWT_LIBRARY_DIR
+    Qwt_INCLUDE_DIR
+    Qwt_LIBRARY
     )

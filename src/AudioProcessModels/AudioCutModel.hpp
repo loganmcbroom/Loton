@@ -3,6 +3,7 @@
 #include "AudioProcessModel.hpp"
 
 class NumberSliderModel;
+class OnOffButtonModel;
 
 struct AudioCutModel : public AudioProcessModel
 	{
@@ -22,17 +23,22 @@ struct AudioCutModel : public AudioProcessModel
 	std::vector<PortIndex> portsRequired() const override { return { 0 }; }
 	QString description() const override
 		{
-		return R"(This returns a peice of the original Audio that lied between Start and End.
+		return R"(This returns a peice of the original Audio, either the piece between Start and End, or the piece at Start with the given length, depending on the mode.
 
 Start - Number:
 	The start time.
 
-End - Number:
-	The end time.
-		)";
+End/Length - Number:
+	The end time, or the length of the cut, depending on the mode.
+	
+Mode:
+	Off - Use start/end mode.
+	On - Use start/length mode.
+	)";
 		}
 
 	std::unique_ptr<NumberSliderModel> leftSliderModel;
 	std::unique_ptr<NumberSliderModel> rightSliderModel;
+	std::unique_ptr<OnOffButtonModel> lengthModeButtonModel;
 	};
 
