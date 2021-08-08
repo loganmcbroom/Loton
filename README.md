@@ -1,5 +1,5 @@
 # Loton
-![Loton Logo](/resources/Media/app-icon.png?raw=true)
+![Loton Logo](/resources/Media/app-icon.png)
 Experimental Audio Workstation  
 
 # Building
