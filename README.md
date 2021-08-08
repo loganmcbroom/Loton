@@ -1,4 +1,5 @@
 # Loton
+![Alt text](resources/Media/app-icon.png?raw=true "Title")
 Experimental Audio Workstation  
 
 # Building

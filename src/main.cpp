@@ -20,12 +20,11 @@ Ideas:
 Completed:
 
 Todo:
-	Icon
     crash on laptop
     Usage guide
 
 Task:
-    lastly do a clean install test
+     Release build tries to use debug libs from cache
 */
 
 
@@ -107,6 +106,7 @@ int main( int argc, char * argv[] )
 	QApplication app( argc, argv );
 	QCoreApplication::setOrganizationName( "Logan McBroom" );
 	QCoreApplication::setApplicationName( "Loton" );
+    app.setWindowIcon( QIcon( ":Media/app-icon.png" ) );
 
 	QFile file( ":/dark.qss" );
 	file.open( QFile::ReadOnly | QFile::Text );

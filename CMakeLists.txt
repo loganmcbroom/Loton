@@ -6,6 +6,17 @@ set( CMAKE_AUTOMOC ON )
 set( CMAKE_AUTORCC ON )
 set( CMAKE_AUTOUIC ON )
 
+# Add icon - see https://doc.qt.io/qt-5/appicon.html
+if( WIN32 )
+	set( APP_ICON_RESOURCE "${CMAKE_CURRENT_SOURCE_DIR}/Resources/Loton.rc" )
+elseif( APPLE )
+    message( "TODO: Mac icon support" )
+elseif( UNIX AND NOT APPLE ) 
+	message( "Linux users don't need icons." )
+else()
+	message( "OS not recognized, no icon for you." )
+endif()
+
 # Create execulable
 add_executable( Loton
 	src/main.cpp
@@ -136,6 +147,7 @@ add_executable( Loton
 
 	resources/Loton.qrc
     resources/Theme/breeze.qrc
+	${APP_ICON_RESOURCE}
     )
 
 target_compile_features( Loton PRIVATE cxx_std_17 )
