@@ -111,4 +111,3 @@ function evaluated at the input. Using polynomial coefficients 1, 1, 0, 0 will n
 
 Feedback nodes always have a "Recursion" setting, which will send the previously processed audio from the FB output rather than the original audio.
 Distribution node inputs don't apply a function to the input, but instead use the input as a fixed seed.
-
