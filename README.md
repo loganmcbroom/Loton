@@ -51,6 +51,7 @@ The flow view is where nodes live and where processing happens.
 When a node is selected, the help panel contains info on what the node does, and what parameters it takes.
 
 
+
 ### Basic usage
 Before getting started making sounds, go to File -> Settings, and set the samples and projects folders.
 The sample folder will now be shown in the file explorer, and samples can be dragged into the flow view to create Audio Source nodes.
@@ -59,6 +60,7 @@ To do anything with the Source node, we need to create a process node. This can 
 right clicking the flow view and selecting a process name there. Try dragging an Audio Repitch into the flow view.
 Nodes have input and output ports on the left and right respectively. Dragging the output port of the Audio Source to the top input of the Audio Repitch will create a Connection. 
 Note that a single output port can be connected to any number of input ports.
+
 In the repitch node there is a number slider. These can be dragged to set the number, but you can also double click them to type the input, or ctrl-click them to reset them to the default.
 When you change the slider, the repitch node will reprocess the Audio Source handed to it. In general, nodes will always recompute the process they represent when given new data.
 Once the process completes (this should be instantaneous for repitching), the play button can be pressed to hear the result.
@@ -66,6 +68,7 @@ Once the process completes (this should be instantaneous for repitching), the pl
 This is the basic workflow of Loton. Connecting nodes in sequence and modifying parameters, and listening to the outputs until you like what you hear.
 When you are ready to save a sound you've made, either drag the waveform icon back into the file explorer, or click the file button on the node.
 To learn more about any process, create a node for it and examine the help panel.
+
 
 
 ### Function Nodes
@@ -80,6 +83,7 @@ Function nodes come in three varieties, 1->1, 2->1, and 2->2. These almost alway
 The individual nodes explain what the function outputs will represent in the help panel. For information on function inputs, see the section on feedback nodes.
 
 Distribution nodes work differently from other function nodes. The graph they display is not the output of the function, but instead a probability density function.
+
 
 
 ### The Phase Vocoder
@@ -98,6 +102,7 @@ as they have to convert the PVOC back to audio internally before playback can be
 
 The phase vocoder has some parameters that can change how other transforms sound. These can be modified globally in the
 settings menu, or you can use an explicit Audio Convet To PVOC node, and its PVOC analog.
+
 
 
 ### Feedback Nodes
